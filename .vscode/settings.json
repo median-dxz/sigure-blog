@@ -1,22 +1,65 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "biomejs.biome",
+  "oxc.requireConfig": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
   },
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
-    "quickfix.biome": "always",
-    "source.organizeImports.biome": "always"
+    "source.fixAll.oxc": "always",
+    "source.organizeImports": "always"
   },
-  "frontMatter.dashboard.openOnStart": false
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "cSpell.words": [
+    "barba",
+    "cascadia",
+    "Consolas",
+    "fontsource",
+    "katex",
+    "lightbox",
+    "Menlo",
+    "noto",
+    "oklch",
+    "onwarn",
+    "overlayscrollbars",
+    "oxlint",
+    "pagefind",
+    "photoswipe",
+    "pswp",
+    "roboto",
+    "shellsession",
+    "Titlebar",
+    "topbar",
+    "wght"
+  ],
+  "editor.suggest.showWords": false,
+  "oxc.enable": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

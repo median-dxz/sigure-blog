@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["import", "react", "promise"],
+  "categories": {
+    "suspicious": "error",
+    "perf": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.svelte", "**/*.astro", "**/*.vue"],
+      "rules": {
+        "import/no-unassigned-import": "allow"
+      }
+    }
+  ],
+  "ignorePatterns": ["src/public/**", "dist/**"]
+}
