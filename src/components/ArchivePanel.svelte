@@ -90,7 +90,7 @@
         </div>
         <div class="w-[15%] md:w-[10%]">
           <div
-            class="h-3 w-3 bg-none rounded-full outline outline-(--primary) mx-auto
+            class="h-3 w-3 bg-none rounded-full outline-(--primary) mx-auto
                   -outline-offset-2 z-50 outline-3"
           ></div>
         </div>
@@ -117,7 +117,7 @@
               <div
                 class="transition-all mx-auto w-1 h-1 rounded group-hover:h-5
                        bg-[oklch(0.5_0.05_var(--hue))] group-hover:bg-(--primary)
-                       outline outline-4 z-50
+                       outline-4 z-50
                        outline-(--card-bg)
                        group-hover:outline-(--btn-plain-bg-hover)
                        group-active:outline-(--btn-plain-bg-active)"
