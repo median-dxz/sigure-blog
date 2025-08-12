@@ -1,0 +1,78 @@
+@reference "tailwindcss";
+
+/* Animations for components */
+@theme {
+  --animate-slide-down-fade-in: slide-down-fade-in 600ms cubic-bezier(0.25, 1, 0.5, 1); /* easeOutQuint-ish */
+  @keyframes slide-down-fade-in {
+    0% {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  --animate-slide-up-fade-in: slide-up-fade-in 600ms cubic-bezier(0.25, 1, 0.5, 1);
+  @keyframes slide-up-fade-in {
+    0% {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  --animate-slide-up-fade-in-small: slide-up-fade-in-small 300ms ease-in-out;
+  @keyframes slide-up-fade-in-small {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  --animate-fade-in: fade-in 200ms ease-in-out;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Page transition animations with Swup */
+
+/* Main components */
+.onload-animation {
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+/* Animation Delay for components */
+nav {
+  animation-delay: 0ms;
+}
+
+/* aside */
+.profile {
+  animation-delay: 100ms;
+}
+[data-id="categories"] {
+  animation-delay: 150ms;
+}
+[data-id="tags"] {
+  animation-delay: 250ms;
+}
+
+.footer {
+  animation-delay: 250ms;
+}

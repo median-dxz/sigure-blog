@@ -2,28 +2,34 @@
   import I18nKey from "@i18n/i18nKey";
   import { i18n } from "@i18n/translation";
   import Icon from "@iconify/svelte";
-  import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
+  import { HUE_DEFAULT, hueStore } from "@store/index";
+  import { onDestroy } from "svelte";
 
-  export let open = false;
+  const { open = false } = $props();
 
-  let hue = getHue();
-  const defaultHue = getDefaultHue();
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  let hue = $state(Number(hueStore.value || HUE_DEFAULT));
+
+  function debounceUpdateHue(value: number) {
+    if (timeoutId) return;
+    timeoutId = setTimeout(() => {
+      hueStore.set(hue.toString());
+      timeoutId = undefined;
+    }, 150);
+  }
 
   function resetHue() {
-    hue = getDefaultHue();
+    $hueStore = HUE_DEFAULT.toString();
   }
 
-  $: if (hue || hue === 0) {
-    setHue(hue);
-  }
+  onDestroy(() => {
+    clearTimeout(timeoutId);
+  });
 </script>
 
 <div
   id="display-setting"
-  class={[
-    "float-panel absolute transition-all w-80 right-4 px-4 py-4",
-    !open && "float-panel-closed",
-  ]}
+  class={["float-panel absolute transition-all w-80 right-4 px-4 py-4", !open && "float-panel-closed"]}
 >
   <div class="flex flex-row gap-2 mb-3 items-center justify-between">
     <div
@@ -35,9 +41,9 @@
       <button
         aria-label="Reset to Default"
         class="btn-regular w-7 h-7 rounded-md active:scale-90"
-        class:opacity-0={hue === defaultHue}
-        class:pointer-events-none={hue === defaultHue}
-        on:click={resetHue}
+        class:opacity-0={$hueStore === HUE_DEFAULT}
+        class:pointer-events-none={$hueStore === HUE_DEFAULT}
+        onclick={resetHue}
       >
         <div class="text-(--btn-content)">
           <Icon icon="fa6-solid:arrow-rotate-left" class="text-[0.875rem]"></Icon>
@@ -60,7 +66,13 @@
       type="range"
       min="0"
       max="360"
-      bind:value={hue}
+      bind:value={
+        () => hue,
+        (v) => {
+          hue = v;
+          debounceUpdateHue(v);
+        }
+      }
       class="slider"
       id="colorSlider"
       step="5"

@@ -10,16 +10,7 @@ export type SiteConfig = {
     hue: number;
     fixed: boolean;
   };
-  banner: {
-    enable: boolean;
-    src: string;
-    position?: "top" | "center" | "bottom";
-    credit: {
-      enable: boolean;
-      text: string;
-      url?: string;
-    };
-  };
+  
   toc: {
     enable: boolean;
     depth: 1 | 2 | 3;

@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+}
+
+@theme {
+  --font-sans: "Exo 2 Variable", "Noto Sans SC Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    "Cascadia Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+}
+
+@import "./components.css";
+@import "./animation.css";
+
+/* @import "./variables.styl"; */
+/* @import "./markdown-extend.styl"; */
+
+@import "./expressive-code.css";
+@import "./markdown.css";
+@import "./photoswipe.css";
+@import "./scrollbar.css";

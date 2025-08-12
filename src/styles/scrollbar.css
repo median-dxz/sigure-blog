@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 .scrollbar-base.os-scrollbar {
   @apply transition-all;
   pointer-events: unset;
@@ -8,7 +10,7 @@
       @apply rounded-full h-1;
     }
     &:hover .os-scrollbar-track .os-scrollbar-handle {
-      @apply h-2;
+      @apply h-[0.5rem];
     }
   }
 
@@ -18,7 +20,7 @@
       @apply rounded-full w-1;
     }
     &:hover .os-scrollbar-track .os-scrollbar-handle {
-      @apply w-[0.5rem];
+      @apply w-4;
     }
   }
 }
