@@ -4,3 +4,5 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
   - swup
+overrides:
+  "@swup/plugin": ">=4.0.0"

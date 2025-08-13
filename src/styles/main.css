@@ -15,10 +15,10 @@
   --font-weight-bold: 700;
 }
 
+@import "./variables.css";
 @import "./components.css";
 @import "./animation.css";
 
-/* @import "./variables.styl"; */
 /* @import "./markdown-extend.styl"; */
 
 @import "./expressive-code.css";

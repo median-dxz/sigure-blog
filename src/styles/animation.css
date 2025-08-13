@@ -2,34 +2,38 @@
 
 /* Animations for components */
 @theme {
-  --animate-slide-down-fade-in: slide-down-fade-in 600ms cubic-bezier(0.25, 1, 0.5, 1); /* easeOutQuint-ish */
+  --animate-slide-down-fade-in: slide-down-fade-in 600ms var(--ease-out-strong); /* easeOutQuint-ish */
   @keyframes slide-down-fade-in {
     0% {
       transform: translateY(-50px);
       opacity: 0;
+      scale: 0.98;
     }
     100% {
       transform: translateY(0);
       opacity: 1;
+      scale: 1;
     }
   }
 
-  --animate-slide-up-fade-in: slide-up-fade-in 600ms cubic-bezier(0.25, 1, 0.5, 1);
+  --animate-slide-up-fade-in: slide-up-fade-in 600ms var(--ease-out-strong);
   @keyframes slide-up-fade-in {
     0% {
       transform: translateY(50px);
       opacity: 0;
+      scale: 0.98;
     }
     100% {
       transform: translateX(0);
       opacity: 1;
+      scale: 1;
     }
   }
 
   --animate-slide-up-fade-in-small: slide-up-fade-in-small 300ms ease-in-out;
   @keyframes slide-up-fade-in-small {
     0% {
-      transform: translateY(10px);
+      transform: translateY(20px);
       opacity: 0;
     }
     100% {
@@ -38,7 +42,7 @@
     }
   }
 
-  --animate-fade-in: fade-in 200ms ease-in-out;
+  --animate-fade-in: fade-in 300ms ease-in-out;
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -50,8 +54,48 @@
 }
 
 /* Page transition animations with Swup */
+.swup-progress-bar {
+  height: 2px;
+  background-color: oklch(0.90 0.05 var(--hue));
+}
 
-/* Main components */
+html.is-changing .swup-transition-main {
+  view-transition-name: main;
+  /* Just for swup to detect when to start the view transition */
+  transition: opacity 10ms;
+}
+
+::view-transition-new(main) {
+  animation: swup-main 300ms var(--ease-out-strong) both;
+  animation-delay: 150ms;
+}
+::view-transition-old(main) {
+  animation: swup-main 300ms var(--ease-in-strong) both reverse;
+}
+
+/* Fallback for browsers that do not support View Transitions */
+html.is-leaving:not(.swup-native) .swup-transition-main {
+  animation: swup-main 300ms var(--ease-in-strong) both reverse;
+  animation-delay: 150ms;
+}
+html.is-rendering:not(.swup-native) .swup-transition-main {
+  animation: swup-main 300ms var(--ease-out-strong) both;
+}
+
+@keyframes swup-main {
+  from {
+    opacity: 0;
+    scale: 98%;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    scale: 100%;
+    transform: translateY(0);
+  }
+}
+
+/* Animation styles for components that require entrance animations */
 .onload-animation {
   opacity: 0;
   animation-fill-mode: forwards;
@@ -64,15 +108,17 @@ nav {
 
 /* aside */
 .profile {
+  animation-delay: 0ms;
+}
+
+[data-id="categories"] {
   animation-delay: 100ms;
 }
-[data-id="categories"] {
-  animation-delay: 150ms;
-}
+
 [data-id="tags"] {
-  animation-delay: 250ms;
+  animation-delay: 200ms;
 }
 
 .footer {
-  animation-delay: 250ms;
+  animation-delay: 100ms;
 }

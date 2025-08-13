@@ -1,13 +1,12 @@
-declare global {
-  interface Window {
-    pagefind: {
-      search: (query: string) => Promise<{
-        results: Array<{
-          data: () => Promise<SearchResult>;
-        }>;
+interface Window {
+  swup: import("swup").Swup;
+  pagefind: {
+    search: (query: string) => Promise<{
+      results: Array<{
+        data: () => Promise<SearchResult>;
       }>;
-    };
-  }
+    }>;
+  };
 }
 
 interface SearchResult {

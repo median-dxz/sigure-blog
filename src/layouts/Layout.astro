@@ -46,7 +46,7 @@ if (!lang) {
 const siteLang = lang.replace("_", "-");
 ---
 
-<html lang={siteLang} class="bg-(--page-bg) transition text-[14px] md:text-[16px]" data-overlayscrollbars-initialize>
+<html lang={siteLang} class="bg-(--page-bg) transition text-[14px] md:text-[16px]">
   <head>
     <title>{pageTitle}</title>
 
@@ -109,12 +109,7 @@ const siteLang = lang.replace("_", "-");
 
     <link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`} />
   </head>
-  <body
-    class="min-h-screen transition"
-    class:list={[{ "lg:is-home": isHomePage }]}
-    data-overlayscrollbars-initialize
-    data-loading-state=""
-  >
+  <body class="min-h-screen transition" class:list={[{ "lg:is-home": isHomePage }]}>
     <slot />
 
     <!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
@@ -134,18 +129,16 @@ const siteLang = lang.replace("_", "-");
 
 <script>
   import { isClickAwayStore, hueStore } from "@store/index";
-  import { OverlayScrollbars } from "overlayscrollbars";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
-  import Swup from "swup";
+
   import { BANNER_HEIGHT, BANNER_HEIGHT_HOME, MAIN_PANEL_OVERLAPS_BANNER_HEIGHT } from "../constants/constants";
   import { getStoredTheme, setTheme } from "../utils/setting-utils";
 
-  import "overlayscrollbars/overlayscrollbars.css";
   import "photoswipe/style.css";
 
   const bannerEnabled = !!document.getElementById("banner-wrapper");
   const lightbox = createPhotoSwipe();
-  const swup = new Swup({});
+  const swup = window.swup;
 
   hueStore.subscribe((value) => {
     const r = document.querySelector(":root") as HTMLElement;
@@ -180,65 +173,51 @@ const siteLang = lang.replace("_", "-");
     setTheme(theme);
   }
 
-  function initCustomScrollbar() {
-    const bodyElement = document.querySelector("body");
-    if (!bodyElement) return;
-    OverlayScrollbars(
-      { target: bodyElement },
-      {
-        scrollbars: {
-          theme: "scrollbar-base scrollbar-auto py-1",
-          autoHide: "move",
-          autoHideDelay: 500,
-          autoHideSuspend: false,
-        },
-      },
-    );
+  // function initCustomScrollbar() {
+  //   const katexElements = document.querySelectorAll(".katex-display") as NodeListOf<HTMLElement>;
 
-    const katexElements = document.querySelectorAll(".katex-display") as NodeListOf<HTMLElement>;
+  //   const katexObserverOptions = {
+  //     root: null,
+  //     rootMargin: "100px",
+  //     threshold: 0.1,
+  //   };
 
-    const katexObserverOptions = {
-      root: null,
-      rootMargin: "100px",
-      threshold: 0.1,
-    };
+  //   const processKatexElement = (element: HTMLElement) => {
+  //     if (!element.parentNode) return;
+  //     if (element.hasAttribute("data-scrollbar-initialized")) return;
 
-    const processKatexElement = (element: HTMLElement) => {
-      if (!element.parentNode) return;
-      if (element.hasAttribute("data-scrollbar-initialized")) return;
+  //     const container = document.createElement("div");
+  //     container.className = "katex-display-container";
+  //     container.setAttribute("aria-label", "scrollable container for formulas");
 
-      const container = document.createElement("div");
-      container.className = "katex-display-container";
-      container.setAttribute("aria-label", "scrollable container for formulas");
+  //     element.parentNode.insertBefore(container, element);
+  //     container.appendChild(element);
 
-      element.parentNode.insertBefore(container, element);
-      container.appendChild(element);
+  //     OverlayScrollbars(container, {
+  //       scrollbars: {
+  //         theme: "scrollbar-base scrollbar-auto",
+  //         autoHide: "leave",
+  //         autoHideDelay: 500,
+  //         autoHideSuspend: false,
+  //       },
+  //     });
 
-      OverlayScrollbars(container, {
-        scrollbars: {
-          theme: "scrollbar-base scrollbar-auto",
-          autoHide: "leave",
-          autoHideDelay: 500,
-          autoHideSuspend: false,
-        },
-      });
+  //     element.setAttribute("data-scrollbar-initialized", "true");
+  //   };
 
-      element.setAttribute("data-scrollbar-initialized", "true");
-    };
+  //   const katexObserver = new IntersectionObserver((entries, observer) => {
+  //     entries.forEach((entry) => {
+  //       if (entry.isIntersecting) {
+  //         processKatexElement(entry.target as HTMLElement);
+  //         observer.unobserve(entry.target);
+  //       }
+  //     });
+  //   }, katexObserverOptions);
 
-    const katexObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          processKatexElement(entry.target as HTMLElement);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, katexObserverOptions);
-
-    katexElements.forEach((element) => {
-      katexObserver.observe(element);
-    });
-  }
+  //   katexElements.forEach((element) => {
+  //     katexObserver.observe(element);
+  //   });
+  // }
 
   function createPhotoSwipe() {
     const lightbox = new PhotoSwipeLightbox({
@@ -276,7 +255,7 @@ const siteLang = lang.replace("_", "-");
 
   /* Load settings when entering the site */
   loadTheme();
-  initCustomScrollbar();
+  // initCustomScrollbar();
 
   // window.swup.hooks.on(
   //   "content:replace",

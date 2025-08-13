@@ -1,8 +1,8 @@
 ---
 import BackToTop from "@components/control/BackToTop.astro";
 import Footer from "@components/Footer.astro";
-import Navbar from "@components/navbar/Navbar.astro";
 import SideBar from "@components/widget/SideBar.astro";
+import Navbar from "@components/navbar/Navbar.astro";
 import TOC from "@components/widget/TOC.astro";
 import type { MarkdownHeading } from "astro";
 import { siteConfig } from "../config";
@@ -35,7 +35,7 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
   </div>
 
   <!-- Main content -->
-  <div class="absolute w-full z-30 pointer-events-none">
+  <div class="absolute w-full z-30 pointer-events-none mt-4">
     <!-- The pointer-events-none here prevent blocking the click event of the TOC -->
     <div class="relative max-w-(--page-width) mx-auto pointer-events-auto">
       <div
@@ -48,9 +48,11 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
           headings={headings}
         />
 
-        <main class="col-span-2 lg:col-span-1 overflow-hidden onload-animation animate-slide-up-fade-in-small">
+        <main class="col-span-2 lg:col-span-1 overflow-hidden swup-transition-main">
           <!-- the overflow-hidden here prevent long text break the layout-->
-          <slot />
+          <div id="main-wrapper" class="w-full onload-animation animate-slide-up-fade-in">
+            <slot />
+          </div>
           <div class="footer col-span-2 onload-animation animate-slide-up-fade-in-small hidden lg:block">
             <Footer />
           </div>

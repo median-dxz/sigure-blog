@@ -1,9 +1,9 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { Page } from "@/pages/[...page].astro";
 import { getPostUrlBySlug } from "@utils/url-utils";
 import PostCard from "./PostCard.astro";
 
-const { page } = Astro.props;
+const { page } = Astro.props as { page: Page };
 
 let delay = 0;
 const interval = 50;
@@ -13,7 +13,7 @@ const interval = 50;
   class="transition flex flex-col rounded-(--radius-large) bg-(--card-bg) py-1 md:py-0 md:bg-transparent md:gap-4 mb-4"
 >
   {
-    page.data.map((entry: CollectionEntry<"posts">) => (
+    page.data.map((entry) => (
       <PostCard
         entry={entry}
         title={entry.data.title}
@@ -26,7 +26,7 @@ const interval = 50;
         description={entry.data.description}
         draft={entry.data.draft}
         class:list={["onload-animation", "animate-slide-up-fade-in-small"]}
-        style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
+        style={`animation-delay: calc(${delay++ * interval}ms);`}
       />
     ))
   }
