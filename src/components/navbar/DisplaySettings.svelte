@@ -2,28 +2,41 @@
   import I18nKey from "@i18n/i18nKey";
   import { i18n } from "@i18n/translation";
   import Icon from "@iconify/svelte";
-  import { HUE_DEFAULT, hueStore } from "@store/index";
-  import { onDestroy } from "svelte";
+  import { DEFAULT_HUE, hueStore } from "@store/index";
+  import { onMount } from "svelte";
 
   const { open = false } = $props();
 
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  let hue = $state(Number(hueStore.value || HUE_DEFAULT));
+  let hue = $state(DEFAULT_HUE);
 
-  function debounceUpdateHue(value: number) {
+  $effect(() => {
+    void hue; // trigger effect when hue changes actively
     if (timeoutId) return;
     timeoutId = setTimeout(() => {
-      hueStore.set(hue.toString());
+      $hueStore = hue.toString();
       timeoutId = undefined;
     }, 150);
-  }
+  });
 
   function resetHue() {
-    $hueStore = HUE_DEFAULT.toString();
+    hue = DEFAULT_HUE.toString();
   }
 
-  onDestroy(() => {
-    clearTimeout(timeoutId);
+  onMount(() => {
+    hue = hueStore.get();
+    const unsubscribeHue = hueStore.subscribe((value) => {
+      const r = document.querySelector(":root") as HTMLElement;
+      if (!r) {
+        return;
+      }
+      r.style.setProperty("--hue", String(value));
+    });
+
+    return () => {
+      unsubscribeHue();
+      clearTimeout(timeoutId);
+    };
   });
 </script>
 
@@ -41,8 +54,8 @@
       <button
         aria-label="Reset to Default"
         class="btn-regular w-7 h-7 rounded-md active:scale-90"
-        class:opacity-0={$hueStore === HUE_DEFAULT}
-        class:pointer-events-none={$hueStore === HUE_DEFAULT}
+        class:opacity-0={$hueStore === DEFAULT_HUE}
+        class:pointer-events-none={$hueStore === DEFAULT_HUE}
         onclick={resetHue}
       >
         <div class="text-(--btn-content)">
@@ -66,13 +79,7 @@
       type="range"
       min="0"
       max="360"
-      bind:value={
-        () => hue,
-        (v) => {
-          hue = v;
-          debounceUpdateHue(v);
-        }
-      }
+      bind:value={hue}
       class="slider"
       id="colorSlider"
       step="5"

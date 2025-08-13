@@ -127,10 +127,9 @@ const siteLang = lang.replace("_", "-");
 </script>
 
 <script>
-  import { hueStore, isClickAwayStore } from "@store/index";
+  import { isClickAwayStore } from "@store/index";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import { BANNER_HEIGHT, BANNER_HEIGHT_HOME, MAIN_PANEL_OVERLAPS_BANNER_HEIGHT } from "../constants/constants";
-  import { getStoredTheme, setTheme } from "../utils/setting-utils";
 
   import "photoswipe/style.css";
 
@@ -166,11 +165,6 @@ const siteLang = lang.replace("_", "-");
       panelDom!.classList.add("float-panel-closed");
       isClickAwayStore.set(panel);
     });
-  }
-
-  function loadTheme() {
-    const theme = getStoredTheme();
-    setTheme(theme);
   }
 
   // function initCustomScrollbar() {
@@ -253,20 +247,9 @@ const siteLang = lang.replace("_", "-");
     return lightbox;
   }
 
-  hueStore.subscribe((value) => {
-    const r = document.querySelector(":root") as HTMLElement;
-    if (!r) {
-      return;
-    }
-    r.style.setProperty("--hue", String(value));
-  });
-
   setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"]);
   setClickOutsideToClose("nav-menu-panel", ["nav-menu-panel", "nav-menu-switch"]);
   setClickOutsideToClose("search-panel", ["search-panel", "search-bar", "search-switch"]);
-
-  /* Load settings when entering the site */
-  loadTheme();
 
   if (window.swup) {
     setupSwupHooks();
