@@ -49,6 +49,33 @@
     @apply drop-shadow-[0_2px_4px_rgba(0,0,0,0.005)];
   }
 
+  .nav-link {
+    @apply transition relative flex items-center justify-center bg-transparent
+        text-black/75 hover:text-(--primary) dark:text-white/75 dark:hover:text-(--primary);
+
+    .nav-text {
+      position: relative;
+      display: inline-block;
+    }
+
+    .nav-text::before {
+      content: "";
+      @apply absolute rounded-[2px] h-0.5 w-0;
+      bottom: -2px;
+      background-color: var(--primary);
+      left: 50%;
+      transform: translateX(-50%);
+      transition:
+        width 0.3s var(--ease-out-strong),
+        left 0.3s ease,
+        transform 0.3s ease;
+    }
+
+    &:hover .nav-text::before {
+      width: 100%;
+    }
+  }
+
   .link-lg {
     @apply transition rounded-md p-1.5 -m-1.5 expand-animation;
   }

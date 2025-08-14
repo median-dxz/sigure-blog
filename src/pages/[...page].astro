@@ -7,11 +7,10 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPosts } from "../utils/content-utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
-	const allBlogPosts = await getSortedPosts();
-	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
+  const allBlogPosts = await getSortedPosts();
+  return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
 }) satisfies GetStaticPaths;
 // https://github.com/withastro/astro/issues/6507#issuecomment-1489916992
-
 
 const { page } = Astro.props;
 
@@ -21,6 +20,10 @@ export type Page = typeof page;
 ---
 
 <MainGridLayout>
-    <PostPage page={page}></PostPage>
-    <Pagination class="mx-auto onload-animation animate-slide-up-fade-in-small" page={page} style={`animation-delay: ${(len)*50}ms)`}></Pagination>
+  <PostPage page={page} />
+  <Pagination
+    class="mx-auto onload-animation animate-slide-up-fade-in-small"
+    page={page}
+    style={`animation-delay: ${(len + 1) * 75}ms`}
+  />
 </MainGridLayout>

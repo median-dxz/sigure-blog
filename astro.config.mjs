@@ -24,6 +24,7 @@ import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
+import { trusted } from "svelte/legacy";
 
 // https://astro.build/config
 export default defineConfig({
@@ -34,12 +35,12 @@ export default defineConfig({
   integrations: [
     swup({
       theme: false,
-      smoothScrolling: false,
+      smoothScrolling: trusted, // Don't use with native at the same time
       progress: true,
       updateHead: true,
       updateBodyClass: false,
       globalInstance: true,
-      native: true,
+      // native: true,
       // debug: import.meta.env.DEV,
       animationClass: "swup-transition-",
     }),

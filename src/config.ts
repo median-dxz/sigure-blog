@@ -21,6 +21,12 @@ export const siteConfig: SiteConfig = {
     //   sizes: '32x32',              // (Optional) Size of the favicon, set only if you have favicons of different sizes
     // }
   ],
+  banner: {
+    srcList: ["bg/bg_1.jpg", "bg/bg_2.jpg", "bg/bg_3.jpg"], // Path to the banner images, relative to the /public directory
+    shuffle: true, // Shuffle the banner images
+    height: 45, // Height of the banner in vh
+    extendHeight: 30, // Height of the extended banner in vh, only applies to the home page
+  },
 };
 
 export const navBarConfig: NavBarConfig = {

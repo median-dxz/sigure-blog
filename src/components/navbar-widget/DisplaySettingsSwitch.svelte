@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DisplaySettings from "@components/navbar/DisplaySettings.svelte";
+  import DisplaySettings from "@components/navbar-widget/DisplaySettings.svelte";
   import Icon from "@iconify/svelte";
   import { isClickAwayStore } from "@store/index";
   import { onDestroy } from "svelte";

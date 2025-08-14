@@ -8,15 +8,16 @@
   const { open = false } = $props();
 
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  let hue = $state(DEFAULT_HUE);
+  let hue = $state(hueStore.get());
 
   $effect(() => {
     void hue; // trigger effect when hue changes actively
     if (timeoutId) return;
+    $hueStore = hue.toString();
     timeoutId = setTimeout(() => {
       $hueStore = hue.toString();
       timeoutId = undefined;
-    }, 150);
+    }, 300);
   });
 
   function resetHue() {

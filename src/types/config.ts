@@ -10,13 +10,19 @@ export type SiteConfig = {
     hue: number;
     fixed: boolean;
   };
-  
+
   toc: {
     enable: boolean;
     depth: 1 | 2 | 3;
   };
 
   favicon: Favicon[];
+  banner?: {
+    srcList: string[];
+    shuffle: boolean;
+    height: number;
+    extendHeight?: number;
+  };
 };
 
 export type Favicon = {
