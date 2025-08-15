@@ -70,7 +70,6 @@ const homePage = Astro.url.pathname === url("/");
           id="banner-wrapper"
           class:list={[
             "top-0 left-0 w-full h-(--banner-height) overflow-hidden",
-            "onload-animation animate-fade-in",
             "transition-[height_background-color] duration-600 ease-in-out",
             { sticky: !homePage, absolute: homePage },
           ]}

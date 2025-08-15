@@ -75,7 +75,7 @@ html.is-changing .swup-transition-main {
 
 /* Fallback for browsers that do not support View Transitions */
 html.is-leaving:not(.swup-native) .swup-transition-main {
-  animation: swup-main 300ms var(--ease-in-strong) both reverse;
+  animation: swup-main 150ms var(--ease-in-strong) both reverse;
 }
 html.is-rendering:not(.swup-native) .swup-transition-main {
   animation: swup-main 300ms var(--ease-out-strong) both;
