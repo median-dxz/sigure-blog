@@ -195,7 +195,3 @@
   transition: all 0.3s;
   transform: translateY(-50%);
 }
-
-.collapsed {
-  height: var(--collapsedHeight);
-}

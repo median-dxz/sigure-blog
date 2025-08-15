@@ -13,8 +13,8 @@ const className = Astro.props.class;
 ---
 
 <aside id="sidebar" class:list={[className, "w-full"]}>
-  <div class="flex flex-col w-full gap-4 mb-4">
-    <Profile class="onload-animation animate-slide-up-fade-in" />
+  <div class="flex flex-col w-full gap-4 mb-4 onload-animation animate-fade-in">
+    <Profile />
   </div>
   <div id="sidebar-sticky" class="transition-all duration-600 flex flex-col w-full gap-4 sticky top-4">
     <Categories class="onload-animation animate-slide-up-fade-in-small" />

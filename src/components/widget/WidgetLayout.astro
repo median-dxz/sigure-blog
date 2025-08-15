@@ -9,9 +9,8 @@ interface Props {
   isCollapsed?: boolean;
   collapsedHeight?: string;
   class?: string;
-  style?: string;
 }
-const { id, name, isCollapsed, collapsedHeight, style } = Astro.props;
+const { id, name, isCollapsed, collapsedHeight } = Astro.props;
 const className = Astro.props.class;
 ---
 
@@ -19,7 +18,9 @@ const className = Astro.props.class;
   data-id={id}
   data-is-collapsed={String(isCollapsed)}
   class:list={["pb-4 card-base", className]}
-  style={style}
+  style={collapsedHeight && {
+    "--collapsedHeight": collapsedHeight,
+  }}
 >
   <div
     class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 relative ml-8 mt-4 mb-2
@@ -44,7 +45,7 @@ const className = Astro.props.class;
   }
 </widget-layout>
 
-<style define:vars={{ collapsedHeight }}>
+<style>
   .collapsed {
     height: var(--collapsedHeight);
   }
