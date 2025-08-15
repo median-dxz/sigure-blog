@@ -4,6 +4,7 @@ import Footer from "@components/Footer.astro";
 import MidoriBackgroundRender from "@components/misc/MidoriBackgroundRender.astro";
 import SideBar from "@components/widget/SideBar.astro";
 import TOC from "@components/widget/TOC.astro";
+import { url } from "@utils/url";
 import type { MarkdownHeading } from "astro";
 import { siteConfig } from "../config";
 import Layout from "./Layout.astro";
@@ -18,6 +19,9 @@ interface Props {
 }
 
 const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.props;
+
+const bannerEnabled = siteConfig?.banner?.imgList && siteConfig.banner.imgList.length > 0;
+const homePage = Astro.url.pathname === url("/");
 ---
 
 <Layout title={title} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
@@ -28,16 +32,16 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
   </div>
 
   <!-- Main content -->
-  <div id="main-content" class:list={["relative max-w-(--page-width) mx-auto h-full z-10"]}>
+  <div id="main-content" class="relative h-full">
     <div
       id="main-grid"
       class:list={[
-        "absolute left-0 top-0 transition-all duration-600 w-full",
+        "transition-all duration-600 delay-500",
+        "relative z-10",
         "grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto]",
-        "mx-auto gap-4 px-0 md:px-4",
-        "delay-500 top-[max(calc(var(--header-height)+1rem),var(--banner-extended-height))]",
+        "max-w-(--page-width) mx-auto gap-4 px-0 md:px-4",
+        "pt-[max(calc(var(--header-height)+1rem),var(--banner-extended-height))]",
       ]}
-      style={{ "will-change": "top" }}
     >
       <SideBar
         class="mb-4 row-start-2 row-end-3 col-span-2 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-70"
@@ -58,24 +62,25 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
         <Footer />
       </div>
     </div>
-
     <BackToTop />
+    <!-- Banner -->
+    {
+      bannerEnabled && (
+        <div
+          id="banner-wrapper"
+          class:list={[
+            "top-0 left-0 w-full h-(--banner-height) overflow-hidden",
+            "onload-animation animate-fade-in",
+            "transition-[height_background-color] duration-600 ease-in-out",
+            { sticky: !homePage, absolute: homePage },
+          ]}
+        >
+          <MidoriBackgroundRender className="w-full bg-(--page-bg) top-0" />
+        </div>
+      )
+    }
   </div>
 
-  <!-- Banner -->
-  {
-    siteConfig.banner && (
-      <div
-        id="banner-wrapper"
-        class:list={[
-          "absolute top-0 left-0 w-full transition duration-700 overflow-hidden h-(--banner-height)",
-          "onload-animation animate-fade-in",
-        ]}
-      >
-        <MidoriBackgroundRender className="w-full h-full bg-(--page-bg)" />
-      </div>
-    )
-  }
   <!-- Banner image credit -->
   <!-- {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
                                    class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +

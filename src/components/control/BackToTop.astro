@@ -3,47 +3,49 @@ import { Icon } from "astro-icon/components";
 ---
 
 <!-- There can't be a filter on parent element, or it will break `fixed` -->
-<div class="back-to-top-wrapper hidden lg:block">
-    <div id="back-to-top-btn" class="back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="backToTop()">
-        <button aria-label="Back to Top" class="btn-card h-15 w-15">
-            <Icon name="material-symbols:keyboard-arrow-up-rounded" class="mx-auto"></Icon>
-        </button>
+<div class="back-to-top-wrapper">
+  <div class="absolute right-0 bottom-0 h-15 w-15">
+    <div id="back-to-top-btn" class="hide" onclick="backToTop()">
+      <button aria-label="Back to Top" class="btn-card">
+        <Icon name="material-symbols:keyboard-arrow-up-rounded" class="mx-auto text-4xl" />
+      </button>
     </div>
+  </div>
 </div>
 
-<style lang="stylus">
-.back-to-top-wrapper
-    width: 3.75rem
-    height: 3.75rem
-    position: absolute
-    right: 0
-    top: 0
-    pointer-events: none
+<style>
+  @reference "tailwindcss";
 
-.back-to-top-btn
-    color: var(--primary)
-    font-size: 2.25rem
-    font-weight: bold
-    border: none
-    position: fixed
-    bottom: 10rem
-    opacity: 1
-    cursor: pointer
-    transform: translateX(5rem)
-    pointer-events: auto
-    i
-        font-size: 1.75rem
-    &.hide
-        transform: translateX(5rem) scale(0.9)
-        opacity: 0
-        pointer-events: none
-    &:active
-      transform: translateX(5rem) scale(0.9)
+  .back-to-top-wrapper {
+    @apply max-w-(--page-width) mx-auto hidden lg:block pointer-events-none relative;
+  }
 
+  #back-to-top-btn {
+    @apply flex items-center border-none pointer-events-auto
+       fixed opacity-100;
+
+    bottom: 10.5rem;
+    transition: all 150ms ease-in-out;
+    transform: translateX(3.5rem);
+
+    &>button {
+      @apply h-15 w-15 rounded-2xl text-(--primary) font-bold cursor-pointer;
+    }
+
+    &.hide {
+      transform: translateX(3.5rem) scale(0.9);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &:active {
+      transform: translateX(3.5rem) scale(0.9);
+    }
+  }
 </style>
 
 <script is:raw is:inline>
-function backToTop() {
-    window.scroll({ top: 0, behavior: 'smooth' });
-}
+  function backToTop() {
+    window.scroll({ top: 0, behavior: "smooth" });
+  }
 </script>

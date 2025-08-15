@@ -120,7 +120,7 @@ const siteLang = lang.replace("_", "-");
 
       // Set CSS variables from site configuration
       document.documentElement.style.setProperty("--page-width", `${PAGE_WIDTH}rem`);
-      document.documentElement.style.setProperty("--banner-height", `${BANNER_HEIGHT}vh`);
+      document.documentElement.style.setProperty("--banner-height", `${isHomePage ? BANNER_HEIGHT : 100}vh`);
       document.documentElement.style.setProperty(
         "--banner-extended-height",
         `${isHomePage ? BANNER_HEIGHT_EXTEND : 0}vh`,
@@ -131,7 +131,7 @@ const siteLang = lang.replace("_", "-");
 
     <link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`} />
   </head>
-  <body class:list={["min-h-screen bg-(--page-bg) transition text-[14px] md:text-[16px] hidden"]}>
+  <body class:list={["min-h-screen bg-(--page-bg) transition text-[14px] md:text-[16px]"]}>
     <div id="data-container" data-home-url={homePageUrl}></div>
     <slot />
   </body>
@@ -154,22 +154,19 @@ const siteLang = lang.replace("_", "-");
   import { siteConfig } from "@/config";
 
   import "photoswipe/style.css";
+  import { isHomePage } from "@utils/client/utils";
 
   let lightbox = createPhotoSwipe();
   const BANNER_HEIGHT = siteConfig.banner?.height ?? BANNER_DEFAULTS.height;
   const BANNER_HEIGHT_EXTEND = siteConfig.banner?.extendHeight ?? BANNER_DEFAULTS.extendHeight;
+  const bannerEnabled = siteConfig?.banner?.imgList && siteConfig.banner.imgList.length > 0;
 
-  function checkIsHomePage(url?: string) {
-    url = url ?? window.location.pathname;
-    const homeUrl = document.getElementById("data-container")?.dataset.homeUrl;
-    return url === homeUrl;
-  }
-
-  function setMainGridTop(isHomePage: boolean) {
+  function setBannerHeight(isHomePage: boolean) {
     document.documentElement.style.setProperty(
       "--banner-extended-height",
       `${isHomePage ? BANNER_HEIGHT_EXTEND : 0}vh`,
     );
+    document.documentElement.style.setProperty("--banner-height", `${isHomePage ? BANNER_HEIGHT : 100}vh`);
   }
 
   function setupSwupHooks() {
@@ -186,7 +183,18 @@ const siteLang = lang.replace("_", "-");
     swup.hooks.on("page:view", (visit) => {
       lightbox = createPhotoSwipe();
 
-      setMainGridTop(checkIsHomePage(visit.to.url));
+      setBannerHeight(isHomePage(visit.to.url));
+
+      const banner = document.getElementById("banner-wrapper");
+      if (banner && bannerEnabled) {
+        if (isHomePage(visit.to.url)) {
+          banner.classList.add("absolute");
+          banner.classList.remove("sticky");
+        } else {
+          banner.classList.add("sticky");
+          banner.classList.remove("absolute");
+        }
+      }
     });
   }
 
@@ -300,8 +308,8 @@ const siteLang = lang.replace("_", "-");
   const toc = document.getElementById("toc-wrapper");
   const header = document.querySelector("header");
 
-  function scrollFunction(evt: Event) {
-    let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100);
+  function scrollFunction(_evt: Event) {
+    const bannerHeight = window.innerHeight * (BANNER_HEIGHT_EXTEND / 100);
 
     if (backToTopBtn) {
       if (document.body.scrollTop > 0 || document.documentElement.scrollTop > 0) {
@@ -320,11 +328,11 @@ const siteLang = lang.replace("_", "-");
     }
 
     if (header) {
+      // TODO: Need refactor
       const NAVBAR_HEIGHT = 72;
       const MAIN_PANEL_EXCESS_HEIGHT = MAIN_PANEL_OVERLAPS_BANNER_HEIGHT * 16; // The height the main panel overlaps the banner
-      const bannerHeight = BANNER_HEIGHT;
 
-      let threshold = window.innerHeight * (bannerHeight / 100) - NAVBAR_HEIGHT - MAIN_PANEL_EXCESS_HEIGHT - 16;
+      let threshold = window.innerHeight * (BANNER_HEIGHT_EXTEND / 100) - NAVBAR_HEIGHT - MAIN_PANEL_EXCESS_HEIGHT - 16;
       if (document.body.scrollTop >= threshold || document.documentElement.scrollTop >= threshold) {
         header.classList.add("navbar-hidden");
       } else {
