@@ -6,7 +6,6 @@
   import Icon from "@iconify/svelte";
   import { themeStore as mode } from "@store/index";
   import { applyThemeToDocument } from "@utils/client/settings";
-
   import { onMount } from "svelte";
 
   const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE, AUTO_MODE];
@@ -42,14 +41,14 @@
     switchScheme(seq[(i + 1) % seq.length]);
   }
 
+  let open = $state(false);
+
   function showPanel() {
-    const panel = document.querySelector("#light-dark-panel");
-    panel?.classList.remove("float-panel-closed");
+    open = true;
   }
 
   function hidePanel() {
-    const panel = document.querySelector("#light-dark-panel");
-    panel?.classList.add("float-panel-closed");
+    open = false;
   }
 </script>
 
@@ -74,7 +73,7 @@
     </div>
   </button>
 
-  <div id="light-dark-panel" class="hidden lg:block absolute transition float-panel-closed top-11 -right-2 pt-5">
+  <div id="light-dark-panel" class="hidden lg:block absolute transition top-11 -right-2 pt-5" class:float-panel-closed={!open}>
     <div class="card-base float-panel p-2">
       <button
         class="flex transition whitespace-nowrap items-center justify-start! w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95 mb-0.5"

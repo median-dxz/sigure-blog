@@ -1,18 +1,18 @@
 ---
+import ImageWrapper from "@components/misc/ImageWrapper.astro";
 import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
+import PostMetadata from "@components/PostMeta.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { formatDateToYYYYMMDD } from "@utils/common";
 import { getSortedPosts } from "@utils/ssr/content";
-import { getDir, getPostUrlBySlug } from "@utils/ssr/url-utils";
+import { getDir, getPostUrlBySlug } from "@utils/url";
 import { Icon } from "astro-icon/components";
 import path from "node:path";
 import { licenseConfig } from "src/config";
-import ImageWrapper from "../../components/misc/ImageWrapper.astro";
-import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
-import { formatDateToYYYYMMDD } from "../../utils/common";
 
 export async function getStaticPaths() {
   const blogEntries = await getSortedPosts();
