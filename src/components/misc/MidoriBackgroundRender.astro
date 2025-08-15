@@ -13,7 +13,7 @@ const { className } = Astro.props;
   import type { ImageTexture } from "@/types/types";
   import { BannerTransitions, BannerEffects } from "@constants/banner-effects";
   import { BANNER_DEFAULTS } from "@constants/constants";
-  import { randInt } from "@utils/common";
+  import { randInt, debounce } from "@utils/common";
   import {
     BackgroundCamera,
     BackgroundRenderer,
@@ -48,6 +48,14 @@ const { className } = Astro.props;
     window.addEventListener("beforeunload", () => {
       renderer.dispose();
     });
+
+    // Not sure if really needed, but keeping it for now
+    // const onContainerResize = debounce(500, () => {
+    //   resetCameraPosition(renderer.background.camera);
+    // });
+
+    // const observer = new ResizeObserver(onContainerResize);
+    // observer.observe(container);
 
     let currentIndex = -1;
     let startTime: number;

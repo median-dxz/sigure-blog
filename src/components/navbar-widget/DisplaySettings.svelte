@@ -3,21 +3,20 @@
   import { i18n } from "@i18n/translation";
   import Icon from "@iconify/svelte";
   import { DEFAULT_HUE, hueStore } from "@store/index";
+  import { debounce } from "@utils/common";
   import { onMount } from "svelte";
 
   const { open = false } = $props();
 
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
   let hue = $state(hueStore.get());
+
+  const mutate = debounce(150, () => {
+    $hueStore = hue;
+  });
 
   $effect(() => {
     void hue; // trigger effect when hue changes actively
-    if (timeoutId) return;
-    $hueStore = hue.toString();
-    timeoutId = setTimeout(() => {
-      $hueStore = hue.toString();
-      timeoutId = undefined;
-    }, 150);
+    mutate();
   });
 
   function resetHue() {
@@ -36,7 +35,6 @@
 
     return () => {
       unsubscribeHue();
-      clearTimeout(timeoutId);
     };
   });
 </script>

@@ -40,7 +40,8 @@ const homePage = Astro.url.pathname === url("/");
         "relative z-10",
         "grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto]",
         "max-w-(--page-width) mx-auto gap-4 px-0 md:px-4",
-        "pt-[max(calc(var(--header-height)+1rem),var(--banner-extended-height))]",
+        "md:pt-[max(calc(var(--header-height)+1rem),var(--banner-extended-height))]",
+        "pt-[calc(var(--header-height)+1rem)]",
       ]}
     >
       <SideBar
@@ -49,6 +50,18 @@ const homePage = Astro.url.pathname === url("/");
       />
 
       <main class="col-span-2 lg:col-span-1 overflow-hidden swup-transition-main">
+        <!-- Banner image credit -->
+        <!-- {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
+                                   class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
+                                   "px-3 right-4 -top-[3.25rem] bg-black/60 hover:bg-black/70 h-9", {"hover:pr-9 active:bg-black/80": hasBannerLink}]}
+            >
+                <Icon class="text-white/75 text-[1.25rem] mr-1" name="material-symbols:copyright-outline-rounded" ></Icon>
+                <div class="text-white/75 text-xs">{siteConfig.banner.credit.text}</div>
+                <Icon class:list={["transition absolute text-[oklch(0.75_0.14_var(--hue))] right-4 text-[0.75rem] opacity-0",
+                    {"group-hover:opacity-100": hasBannerLink}]}
+                      name="fa6-solid:arrow-up-right-from-square">
+                </Icon>
+            </a>} -->
         <!-- the overflow-hidden here prevent long text break the layout-->
         <div id="main-wrapper" class="w-full onload-animation animate-slide-up-fade-in">
           <slot />
@@ -64,37 +77,24 @@ const homePage = Astro.url.pathname === url("/");
     </div>
     <BackToTop />
     <!-- Banner -->
-    {
-      bannerEnabled && (
-        <div
-          id="banner-wrapper"
-          class:list={[
-            "top-0 left-0 w-full h-(--banner-height) overflow-hidden",
-            "transition-[height_background-color] duration-600 ease-in-out",
-            { sticky: !homePage, absolute: homePage },
-          ]}
-        >
-          <MidoriBackgroundRender className="w-full bg-(--page-bg) top-0" />
-        </div>
-      )
-    }
+    <div class="absolute h-full w-full hidden md:block top-0">
+      {
+        bannerEnabled && (
+          <div id="banner-wrapper" class:list={["w-full overflow-hidden top-0", { sticky: !homePage, absolute: homePage }]}>
+            <MidoriBackgroundRender
+              className={[
+                "w-full h-(--banner-height) bg-(--page-bg)",
+                "transition-[height_background-color] duration-600 ease-in-out",
+              ].join("")}
+            />
+          </div>
+        )
+      }
+    </div>
   </div>
 
-  <!-- Banner image credit -->
-  <!-- {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
-                                   class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
-                                   "px-3 right-4 -top-[3.25rem] bg-black/60 hover:bg-black/70 h-9", {"hover:pr-9 active:bg-black/80": hasBannerLink}]}
-            >
-                <Icon class="text-white/75 text-[1.25rem] mr-1" name="material-symbols:copyright-outline-rounded" ></Icon>
-                <div class="text-white/75 text-xs">{siteConfig.banner.credit.text}</div>
-                <Icon class:list={["transition absolute text-[oklch(0.75_0.14_var(--hue))] right-4 text-[0.75rem] opacity-0",
-                    {"group-hover:opacity-100": hasBannerLink}]}
-                      name="fa6-solid:arrow-up-right-from-square">
-                </Icon>
-            </a>} -->
-
   <!-- The things that should be under the banner, only the TOC for now -->
-  <div class="absolute w-full z-10 hidden 2xl:block">
+  <div class="absolute w-full hidden 2xl:block">
     <div class="relative max-w-(--page-width) mx-auto">
       <!-- TOC component -->
       {
