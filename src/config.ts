@@ -1,3 +1,4 @@
+import { TransitionType } from "midori-bg";
 import type { ExpressiveCodeConfig, LicenseConfig, NavBarConfig, ProfileConfig, SiteConfig } from "./types/config";
 import { LinkPreset } from "./types/config";
 
@@ -22,10 +23,27 @@ export const siteConfig: SiteConfig = {
     // }
   ],
   banner: {
-    srcList: ["bg/bg_1.jpg", "bg/bg_2.jpg", "bg/bg_3.jpg"], // Path to the banner images, relative to the /public directory
-    shuffle: true, // Shuffle the banner images
-    height: 45, // Height of the banner in vh
-    extendHeight: 30, // Height of the extended banner in vh, only applies to the home page
+    // Path to the banner images, relative to the /public directory
+    imgList: [
+      `/bg/bg_1.jpg`,
+      `/bg/bg_2.jpg`,
+      `/bg/bg_3.jpg`,
+      `/bg/bg_4.jpg`,
+      `/bg/bg_5.jpg`,
+      `/bg/bg_6.jpg`,
+      `/bg/bg_7.jpg`,
+      `/bg/bg_8.jpg`,
+      `/bg/bg_9.jpg`,
+    ],
+    random: true, // Whether to randomly select a banner image from the list
+    height: 65, // Height of the banner in vh, only applies to the home page (default: 65vh)
+    extendHeight: 60, // Height of the extended banner in vh, only applies to the home page (default: 60vh)
+    elapsedTime: 15000, // Time in milliseconds for the banner to change (default: 15000ms)
+    transitions: [TransitionType.Glitch, TransitionType.Blend], // Array of transition effects for the banner, will randomly select one from the list
+    effects: {
+      Vignette: true,
+      VignetteBlur: true,
+    }, // Array of effects for the banner, doesn't support Glitch and MotionBlur effects
   },
 };
 

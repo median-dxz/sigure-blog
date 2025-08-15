@@ -1,0 +1,204 @@
+---
+interface Props {
+  className: string;
+}
+
+const { className } = Astro.props;
+---
+
+<canvas id="midori-background" class={className}></canvas>
+
+<script>
+  import { siteConfig } from "@/config";
+  import type { ImageTexture } from "@/types/types";
+  import { BannerTransitions, BannerEffects } from "@constants/banner-effects";
+  import { BANNER_DEFAULTS } from "@constants/constants";
+  import { randInt } from "@utils/common";
+  import {
+    BackgroundCamera,
+    BackgroundRenderer,
+    Easings,
+    isWebGLSupported,
+    loadImage,
+    TransitionType,
+    type BackgroundTransitionConfig,
+    type CameraOffset,
+    type LoopableTransitionConfig,
+    type Transition,
+  } from "midori-bg";
+
+  const config = { ...BANNER_DEFAULTS, ...siteConfig.banner };
+  const container = document.getElementById("midori-background") as HTMLCanvasElement;
+
+  function waitForCanvasReady(canvas: HTMLCanvasElement, callback: () => unknown) {
+    function checkSize() {
+      if (canvas.clientWidth > 0 && canvas.clientHeight > 0) {
+        callback();
+      } else {
+        requestAnimationFrame(checkSize);
+      }
+    }
+    checkSize();
+  }
+
+  function renderBackground(container: HTMLCanvasElement, images: Array<ImageTexture>) {
+    const renderer = new BackgroundRenderer(container);
+    console.log("[midori]: Renderer initialized with", images.length, "images");
+
+    window.addEventListener("beforeunload", () => {
+      renderer.dispose();
+    });
+
+    let currentIndex = -1;
+    let startTime: number;
+    /**
+     * This controls the camera's sway effect on the background.
+     * @property x Horizontal sway offset.
+     * @property y Vertical sway offset.
+     * @property z Depth sway offset.
+     * @property zr Rotation sway offset.
+     */
+    const swayOffset: CameraOffset = { x: 0.5, y: 0.08, z: 0.06, zr: 2 };
+    const swayConfig: LoopableTransitionConfig = {
+      duration: 6,
+      easing: Easings.Quadratic.InOut,
+      loop: true,
+    };
+
+    const shuffleImages = () => {
+      if (images.length < 2) return;
+
+      const head = images.splice(images.length - 2, 1)[0];
+      config.random && images.sort(() => Math.random() - 0.5).unshift(head);
+    };
+
+    const getImage = () => {
+      currentIndex += 1;
+      if (currentIndex >= images.length) {
+        // We want't to just randomly choose an image, because that's may choose the same image again
+        // So just shuffle the images and loop through them even round
+        shuffleImages();
+        currentIndex = 0;
+      }
+      // console.log("[midori]: Current background image index:", currentIndex);
+      return images[currentIndex];
+    };
+
+    const dispatchBackgroundSetEvent = (image: ImageTexture) => {
+      container.dispatchEvent(new CustomEvent("midori:background-set", { detail: { image } }));
+    };
+
+    const resetCameraPosition = (camera: BackgroundCamera) => {
+      camera.move({ x: 0.75, y: 0.5 });
+    };
+
+    // First load will always move the second-to-last image to the first position
+    // So we shuffle the images twice to ensure randomness
+    (shuffleImages(), shuffleImages());
+    renderer.setBackground(getImage().texture, { type: TransitionType.Blend, config: {} });
+    type EffectConfigKeys = keyof typeof config.effects;
+    Object.entries(config.effects)
+      .filter(([effectType, enable]) => BannerEffects[effectType as EffectConfigKeys] && enable)
+      .forEach((entries) => {
+        const effectType = entries[0] as EffectConfigKeys;
+        const effectConfig = BannerEffects[effectType];
+        renderer.effects.set(effectType, effectConfig);
+      });
+    renderer.background.camera.sway(swayOffset, swayConfig);
+    resetCameraPosition(renderer.background.camera);
+    dispatchBackgroundSetEvent(images[currentIndex]);
+
+    const transitionBackground = () => {
+      const trType = config.transitions.at(randInt(0, config.transitions.length - 1)) as keyof typeof BannerTransitions;
+      // console.log("[midori]: Transitioning background with effect:", trName);
+      const trObj = BannerTransitions[trType];
+
+      let transition: Transition;
+      let trHooks: BackgroundTransitionConfig = {
+        onInit(_prev, next) {
+          next.camera.sway(swayOffset, swayConfig);
+          resetCameraPosition(next.camera);
+        },
+      };
+
+      const isFunction = (v: unknown): v is () => unknown => typeof v === "function";
+
+      if (isFunction(trObj)) {
+        transition = trObj();
+      } else {
+        transition = trObj ?? ({} as Transition);
+      }
+
+      transition = {
+        type: transition.type,
+        config: {
+          ...transition.config,
+          ...trHooks,
+        },
+      } as Transition;
+
+      const image = getImage();
+      renderer.setBackground(image.texture, transition);
+      dispatchBackgroundSetEvent(image);
+    };
+
+    const onRequestAnimationFrame = (now: number) => {
+      if (!startTime) startTime = now;
+      const elapsed = now - startTime;
+
+      if (elapsed > config.elapsedTime) {
+        transitionBackground();
+        startTime = now;
+      }
+
+      requestAnimationFrame(onRequestAnimationFrame);
+    };
+
+    requestAnimationFrame(onRequestAnimationFrame);
+  }
+
+  // main process to load images and render background
+  void (async () => {
+    if (!isWebGLSupported()) {
+      console.warn("[midori]: WebGL is not supported, skipping background rendering.");
+      return;
+    }
+
+    if (config.imgList && config.imgList.length > 0 && container) {
+      let imgList = config?.imgList;
+
+      const imageTextures = await Promise.allSettled(
+        imgList.map((v) => (typeof v === "string" ? v : v.src)).map(loadImage),
+      ).then(
+        (results) =>
+          results
+            .map((result, index) => {
+              if (result.status === "rejected") {
+                console.warn("[midori]: Failed to load image:", result.reason);
+                return null;
+              }
+
+              const id = crypto.randomUUID();
+
+              if (typeof imgList[index] === "string") {
+                return { src: imgList[index], texture: result.value, id };
+              } else {
+                return { ...imgList[index], texture: result.value, id };
+              }
+            })
+            .filter(Boolean) as ImageTexture[],
+      );
+
+      if (imageTextures.length === 0) {
+        console.warn("[midori]: No valid images loaded for background.");
+        return;
+      }
+
+      console.log("[midori]: Background images loaded successfully");
+
+      waitForCanvasReady(container, () => renderBackground(container, imageTextures));
+    } else {
+      console.log("[midori]: No background images configured.");
+    }
+  })();
+</script>

@@ -4,5 +4,9 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
   - swup
+
 overrides:
-  "@swup/plugin": ">=4.0.0"
+  '@swup/plugin': '>=4.0.0'
+
+patchedDependencies:
+  midori-bg@1.0.3: patches/midori-bg@1.0.3.patch

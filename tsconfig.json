@@ -5,6 +5,7 @@
     "strictNullChecks": true,
     "allowJs": false,
     "declaration": true,
+    "verbatimModuleSyntax": true,
     // "skipLibCheck": false,
     "plugins": [
       {

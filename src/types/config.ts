@@ -1,4 +1,5 @@
 import type { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants";
+import type { EffectType, TransitionType } from "midori-bg";
 
 export type SiteConfig = {
   title: string;
@@ -17,13 +18,25 @@ export type SiteConfig = {
   };
 
   favicon: Favicon[];
+
   banner?: {
-    srcList: string[];
-    shuffle: boolean;
-    height: number;
+    imgList: Array<string | ImageSrc>;
+    transitions?: Array<TransitionType>;
+    effects?: {
+      [type in Exclude<EffectType, EffectType.MotionBlur | EffectType.Glitch>]?: boolean;
+    };
+    random?: boolean;
+    height?: number;
     extendHeight?: number;
+    elapsedTime?: number;
   };
 };
+
+export interface ImageSrc {
+  name?: string;
+  credit?: string;
+  src: string;
+}
 
 export type Favicon = {
   src: string;

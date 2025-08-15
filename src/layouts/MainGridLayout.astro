@@ -1,7 +1,7 @@
 ---
 import BackToTop from "@components/control/BackToTop.astro";
 import Footer from "@components/Footer.astro";
-import ImageWrapper from "@components/misc/ImageWrapper.astro";
+import MidoriBackgroundRender from "@components/misc/MidoriBackgroundRender.astro";
 import SideBar from "@components/widget/SideBar.astro";
 import TOC from "@components/widget/TOC.astro";
 import type { MarkdownHeading } from "astro";
@@ -24,7 +24,7 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
   <!-- Navbar -->
   <slot slot="head" name="head" />
   <div id="top-row" class="relative w-full z-50">
-    <Navbar class="onload-animation animate-slide-down-fade-in"/>
+    <Navbar class="onload-animation animate-slide-down-fade-in" />
   </div>
 
   <!-- Main content -->
@@ -32,11 +32,12 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
     <div
       id="main-grid"
       class:list={[
-        "absolute left-0 top-0 transition-all duration-600 w-full min-h-screen",
+        "absolute left-0 top-0 transition-all duration-600 w-full",
         "grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto]",
         "mx-auto gap-4 px-0 md:px-4",
-        "delay-500 top-[calc(var(--header-height)+var(--banner-extended-height)+1rem)]",
+        "delay-500 top-[max(calc(var(--header-height)+1rem),var(--banner-extended-height))]",
       ]}
+      style={{ "will-change": "top" }}
     >
       <SideBar
         class="mb-4 row-start-2 row-end-3 col-span-2 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-70"
@@ -71,13 +72,7 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
           "onload-animation animate-fade-in",
         ]}
       >
-        <ImageWrapper
-          id="banner"
-          alt="Banner image of the blog"
-          class={`object-cover transition duration-700 scale-105`}
-          src={"/bg/bg_1.jpg"}
-          position={"center"}
-        />
+        <MidoriBackgroundRender className="w-full h-full bg-(--page-bg)" />
       </div>
     )
   }
@@ -93,7 +88,6 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
                       name="fa6-solid:arrow-up-right-from-square">
                 </Icon>
             </a>} -->
-  <!-- position={siteConfig.banner.position} -->
 
   <!-- The things that should be under the banner, only the TOC for now -->
   <div class="absolute w-full z-10 hidden 2xl:block">

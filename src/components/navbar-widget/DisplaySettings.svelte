@@ -17,7 +17,7 @@
     timeoutId = setTimeout(() => {
       $hueStore = hue.toString();
       timeoutId = undefined;
-    }, 300);
+    }, 150);
   });
 
   function resetHue() {

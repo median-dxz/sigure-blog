@@ -3,11 +3,15 @@
 
   import I18nKey from "../i18n/i18nKey";
   import { i18n } from "../i18n/translation";
-  import { getPostUrlBySlug } from "../utils/url-utils";
+  import { getPostUrlBySlug } from "@utils/url";
 
-  export let tags: string[];
-  export let categories: string[];
-  export let sortedPosts: Post[] = [];
+  interface Props {
+    tags: string[];
+    categories: string[];
+    sortedPosts?: Post[];
+  }
+
+  let { tags = $bindable(), categories = $bindable(), sortedPosts = [] }: Props = $props();
 
   const params = new URLSearchParams(window.location.search);
   tags = params.has("tag") ? params.getAll("tag") : [];
@@ -29,7 +33,7 @@
     posts: Post[];
   }
 
-  let groups: Group[] = [];
+  let groups: Group[] = $state([]);
 
   function formatDate(date: Date) {
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
