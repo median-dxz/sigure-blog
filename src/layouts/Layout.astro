@@ -1,5 +1,5 @@
 ---
-import { profileConfig, siteConfig } from "@/config";
+import { expressiveCodeConfig, profileConfig, siteConfig } from "@/config";
 import { AUTO_MODE, DARK_MODE, DEFAULT_THEME, LIGHT_MODE, PAGE_WIDTH, BANNER_DEFAULTS } from "../constants/constants";
 import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
@@ -48,7 +48,7 @@ if (!lang) {
 const siteLang = lang.replace("_", "-");
 ---
 
-<html lang={siteLang} class="scroll-auto">
+<html lang={siteLang} class="scroll-auto" data-theme={expressiveCodeConfig.theme}>
   <head>
     <title>{pageTitle}</title>
 
@@ -98,19 +98,21 @@ const siteLang = lang.replace("_", "-");
       }}
     >
       // Load the theme from local storage
+      // This should be done before the page is rendered to avoid a flash of unstyled content
+      // So the theme mode can only be stored in <html> element
       const theme = localStorage.getItem("theme") || DEFAULT_THEME;
       switch (theme) {
         case LIGHT_MODE:
-          document.documentElement.classList.remove("dark");
+          document.documentElement.dataset.siteTheme = LIGHT_MODE;
           break;
         case DARK_MODE:
-          document.documentElement.classList.add("dark");
+          document.documentElement.dataset.siteTheme = DARK_MODE;
           break;
         case AUTO_MODE:
           if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            document.documentElement.classList.add("dark");
+            document.documentElement.dataset.siteTheme = DARK_MODE;
           } else {
-            document.documentElement.classList.remove("dark");
+            document.documentElement.dataset.siteTheme = LIGHT_MODE;
           }
       }
 
@@ -148,18 +150,21 @@ const siteLang = lang.replace("_", "-");
 </script>
 
 <script>
-  import { isClickAwayStore } from "@store/index";
+  import { isClickAwayStore, themeStore } from "@store/index";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import { BANNER_DEFAULTS, MAIN_PANEL_OVERLAPS_BANNER_HEIGHT } from "../constants/constants";
   import { siteConfig } from "@/config";
+  import { applyThemeToDocument } from "@utils/client/settings";
+  import { isHomePage } from "@utils/client/utils";
 
   import "photoswipe/style.css";
-  import { isHomePage } from "@utils/client/utils";
 
   let lightbox = createPhotoSwipe();
   const BANNER_HEIGHT = siteConfig.banner?.height ?? BANNER_DEFAULTS.height;
   const BANNER_HEIGHT_EXTEND = siteConfig.banner?.extendHeight ?? BANNER_DEFAULTS.extendHeight;
   const bannerEnabled = siteConfig?.banner?.imgList && siteConfig.banner.imgList.length > 0;
+
+  themeStore.subscribe(applyThemeToDocument);
 
   function setBannerHeight(isHomePage: boolean) {
     document.documentElement.style.setProperty(

@@ -49,6 +49,7 @@ const homePage = Astro.url.pathname === url("/");
         headings={headings}
       />
 
+      <!-- the overflow-hidden here prevent long text break the layout-->
       <main class="col-span-2 lg:col-span-1 overflow-hidden swup-transition-main">
         <!-- Banner image credit -->
         <!-- {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
@@ -62,7 +63,6 @@ const homePage = Astro.url.pathname === url("/");
                       name="fa6-solid:arrow-up-right-from-square">
                 </Icon>
             </a>} -->
-        <!-- the overflow-hidden here prevent long text break the layout-->
         <div id="main-wrapper" class="w-full onload-animation animate-slide-up-fade-in">
           <slot />
         </div>
@@ -80,7 +80,10 @@ const homePage = Astro.url.pathname === url("/");
     <div class="absolute h-full w-full hidden md:block top-0">
       {
         bannerEnabled && (
-          <div id="banner-wrapper" class:list={["w-full overflow-hidden top-0", { sticky: !homePage, absolute: homePage }]}>
+          <div
+            id="banner-wrapper"
+            class:list={["w-full overflow-hidden top-0", { sticky: !homePage, absolute: homePage }]}
+          >
             <MidoriBackgroundRender
               className={[
                 "w-full h-(--banner-height) bg-(--page-bg)",

@@ -15,6 +15,8 @@
   --font-weight-bold: 700;
 }
 
+@custom-variant dark (&:where([data-site-theme=dark], [data-site-theme=dark] *));
+
 @import "./variables.css";
 @import "./components.css";
 @import "./animation.css";

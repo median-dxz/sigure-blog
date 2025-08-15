@@ -1,14 +1,14 @@
 ---
-import { Icon } from "astro-icon/components";
 import { navBarConfig, siteConfig } from "@/config";
-import { LinkPresets } from "@constants/link-presets";
 import { LinkPreset, type NavBarLink } from "@/types/config";
+import { LinkPresets } from "@constants/link-presets";
 import { url } from "@utils/url";
+import { Icon } from "astro-icon/components";
 
-import LightDarkSwitch from "@components/navbar-widget/LightDarkSwitch.svelte";
-import Search from "@components/navbar-widget/Search.svelte";
 import DisplaySettingsSwitch from "@components/navbar-widget/DisplaySettingsSwitch.svelte";
+import LightDarkSwitch from "@components/navbar-widget/LightDarkSwitch.svelte";
 import NavMenuPanel from "@components/navbar-widget/NavMenuPanel.astro";
+import Search from "@components/navbar-widget/Search.svelte";
 
 const className = Astro.props.class;
 
@@ -89,36 +89,15 @@ let links: NavBarLink[] = navBarConfig.links.map((item: NavBarLink | LinkPreset)
 </header>
 
 <script>
-  function switchTheme() {
-    if (localStorage.theme === "dark") {
-      document.documentElement.classList.remove("dark");
-      localStorage.theme = "light";
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.theme = "dark";
-    }
+  let menuBtn = document.getElementById("nav-menu-switch");
+  if (menuBtn) {
+    menuBtn.onclick = function () {
+      let menuPanel = document.getElementById("nav-menu-panel");
+      if (menuPanel) {
+        menuPanel.classList.toggle("float-panel-closed");
+      }
+    };
   }
-
-  function loadButtonScript() {
-    let switchBtn = document.getElementById("scheme-switch");
-    if (switchBtn) {
-      switchBtn.onclick = function () {
-        switchTheme();
-      };
-    }
-
-    let menuBtn = document.getElementById("nav-menu-switch");
-    if (menuBtn) {
-      menuBtn.onclick = function () {
-        let menuPanel = document.getElementById("nav-menu-panel");
-        if (menuPanel) {
-          menuPanel.classList.toggle("float-panel-closed");
-        }
-      };
-    }
-  }
-
-  loadButtonScript();
 </script>
 
 <script
