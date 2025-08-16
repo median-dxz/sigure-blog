@@ -30,4 +30,4 @@ jobs:
         run: pnpm exec prettier --check "src/**/*.{js,ts,jsx,tsx,json,css,md}"
 
       - name: Run oxlint
-        run: pnpm exec oxlint --strict ./src
+        run: pnpm lint
