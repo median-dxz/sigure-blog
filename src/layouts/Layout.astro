@@ -1,9 +1,9 @@
 ---
 import { expressiveCodeConfig, profileConfig, siteConfig } from "@/config";
-import { AUTO_MODE, DARK_MODE, DEFAULT_THEME, LIGHT_MODE, PAGE_WIDTH, BANNER_DEFAULTS } from "../constants/constants";
+import { AUTO_MODE, BANNER_DEFAULTS, DARK_MODE, DEFAULT_THEME, LIGHT_MODE, PAGE_WIDTH } from "../constants/constants";
 import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
-import { pathsEqual, url } from "../utils/url";
+import { checkOnHomePage, url } from "../utils/url";
 
 import "@fontsource-variable/exo-2";
 import exo2Woff2 from "@fontsource-variable/exo-2/files/exo-2-latin-wght-normal.woff2?url";
@@ -22,8 +22,7 @@ interface Props {
 
 let { title, description, lang, setOGTypeArticle } = Astro.props;
 
-const homePageUrl = url("/");
-const isHomePage = pathsEqual(Astro.url.pathname, homePageUrl);
+const isHomePage = checkOnHomePage(Astro.url.pathname);
 
 // defines global css variables
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
@@ -133,8 +132,15 @@ const siteLang = lang.replace("_", "-");
 
     <link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`} />
   </head>
-  <body class:list={["min-h-screen bg-(--page-bg) transition text-[14px] md:text-[16px]"]}>
-    <div id="data-container" data-home-url={homePageUrl}></div>
+  <body
+    class:list={[
+      "min-h-screen bg-(--page-bg) transition text-[14px] md:text-[16px]",
+      "selection:bg-(--selection-bg)",
+      "hidden",
+    ]}
+  >
+    <!-- No effects for now -->
+    <div id="data-container"></div>
     <slot />
   </body>
 </html>
@@ -150,12 +156,12 @@ const siteLang = lang.replace("_", "-");
 </script>
 
 <script>
+  import { siteConfig } from "@/config";
   import { isClickAwayStore, themeStore } from "@store/index";
+  import { applyThemeToDocument } from "@utils/client/settings";
+  import { checkOnHomePage } from "@utils/url";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import { BANNER_DEFAULTS, MAIN_PANEL_OVERLAPS_BANNER_HEIGHT } from "../constants/constants";
-  import { siteConfig } from "@/config";
-  import { applyThemeToDocument } from "@utils/client/settings";
-  import { isHomePage } from "@utils/client/utils";
 
   import "photoswipe/style.css";
 
@@ -165,14 +171,6 @@ const siteLang = lang.replace("_", "-");
   const bannerEnabled = siteConfig?.banner?.imgList && siteConfig.banner.imgList.length > 0;
 
   themeStore.subscribe(applyThemeToDocument);
-
-  function setBannerHeight(isHomePage: boolean) {
-    document.documentElement.style.setProperty(
-      "--banner-extended-height",
-      `${isHomePage ? BANNER_HEIGHT_EXTEND : 0}vh`,
-    );
-    document.documentElement.style.setProperty("--banner-height", `${isHomePage ? BANNER_HEIGHT : 100}vh`);
-  }
 
   function setupSwupHooks() {
     const swup = window.swup;
@@ -187,17 +185,32 @@ const siteLang = lang.replace("_", "-");
 
     swup.hooks.on("page:view", (visit) => {
       lightbox = createPhotoSwipe();
+      const isHomePage = checkOnHomePage(visit.to.url);
 
-      setBannerHeight(isHomePage(visit.to.url));
+      // Because those elements are not swapped by swup, we need to set style them manually
+      document.documentElement.style.setProperty(
+        "--banner-extended-height",
+        `${isHomePage ? BANNER_HEIGHT_EXTEND : 0}vh`,
+      );
+      document.documentElement.style.setProperty("--banner-height", `${isHomePage ? BANNER_HEIGHT : 100}vh`);
 
       const banner = document.getElementById("banner-wrapper");
       if (banner && bannerEnabled) {
-        if (isHomePage(visit.to.url)) {
+        if (isHomePage) {
           banner.classList.add("absolute");
           banner.classList.remove("sticky");
         } else {
           banner.classList.add("sticky");
           banner.classList.remove("absolute");
+        }
+      }
+
+      const bannerLocator = document.getElementById("banner-locator");
+      if (bannerLocator) {
+        if (isHomePage) {
+          bannerLocator.classList.remove("hidden");
+        } else {
+          bannerLocator.classList.add("hidden");
         }
       }
     });
@@ -310,7 +323,7 @@ const siteLang = lang.replace("_", "-");
   }
 
   const backToTopBtn = document.getElementById("back-to-top-btn");
-  const toc = document.getElementById("toc-wrapper");
+  const toc = document.getElementById("toc-inner-wrapper");
   const header = document.querySelector("header");
 
   function scrollFunction(_evt: Event) {

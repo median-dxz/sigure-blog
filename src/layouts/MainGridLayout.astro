@@ -4,7 +4,7 @@ import Footer from "@components/Footer.astro";
 import MidoriBackgroundRender from "@components/misc/MidoriBackgroundRender.astro";
 import SideBar from "@components/widget/SideBar.astro";
 import TOC from "@components/widget/TOC.astro";
-import { url } from "@utils/url";
+import { checkOnHomePage, url } from "@utils/url";
 import type { MarkdownHeading } from "astro";
 import { siteConfig } from "../config";
 import Layout from "./Layout.astro";
@@ -21,7 +21,7 @@ interface Props {
 const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.props;
 
 const bannerEnabled = siteConfig?.banner?.imgList && siteConfig.banner.imgList.length > 0;
-const homePage = Astro.url.pathname === url("/");
+const isHomePage = checkOnHomePage(Astro.url.pathname);
 ---
 
 <Layout title={title} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
@@ -75,14 +75,14 @@ const homePage = Astro.url.pathname === url("/");
         <Footer />
       </div>
     </div>
-    <BackToTop />
+
     <!-- Banner -->
-    <div class="absolute h-full w-full hidden md:block top-0">
+    <div id="banner-locator" class:list={["absolute h-full w-full top-0 -z-10", { "hidden lg:block": !isHomePage }]}>
       {
         bannerEnabled && (
           <div
             id="banner-wrapper"
-            class:list={["w-full overflow-hidden top-0", { sticky: !homePage, absolute: homePage }]}
+            class:list={["w-full overflow-hidden top-0", { sticky: !isHomePage, absolute: isHomePage }]}
           >
             <MidoriBackgroundRender
               className={[
@@ -96,19 +96,22 @@ const homePage = Astro.url.pathname === url("/");
     </div>
   </div>
 
-  <!-- The things that should be under the banner, only the TOC for now -->
-  <div class="absolute w-full hidden 2xl:block">
+  <div class="absolute w-full">
     <div class="relative max-w-(--page-width) mx-auto">
-      <!-- TOC component -->
-      {
-        siteConfig.toc.enable && (
-          <div
-            id="toc-wrapper"
-            class:list={["hidden lg:block transition absolute top-0 -right-(--toc-width) w-(--toc-width) items-center"]}
-          >
+      <!-- TOC component with BackToTop button -->
+
+      <div
+        id="right-aside-wrapper"
+        class:list={["hidden xl:block transition absolute top-0 -right-(--toc-width) w-(--toc-width) items-center"]}
+      >
+        {
+          siteConfig.toc.enable && (
             <div
               id="toc-inner-wrapper"
-              class="fixed top-14 w-(--toc-width) h-[calc(100vh-20rem)] overflow-y-scroll overflow-x-hidden hide-scrollbar"
+              class:list={[
+                "fixed top-14 w-(--toc-width) h-[calc(100vh-20rem)]",
+                "overflow-y-scroll overflow-x-hidden hide-scrollbar hidden 2xl:block",
+              ]}
             >
               <div id="toc" class="w-full h-full">
                 <div class="h-8 w-full" />
@@ -116,9 +119,10 @@ const homePage = Astro.url.pathname === url("/");
                 <div class="h-8 w-full" />
               </div>
             </div>
-          </div>
-        )
-      }
+          )
+        }
+        <BackToTop />
+      </div>
 
       <!-- #toc needs to exist for Swup to work normally -->
       {!siteConfig.toc.enable && <div id="toc" />}

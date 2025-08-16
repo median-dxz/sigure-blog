@@ -11,9 +11,9 @@ const { className } = Astro.props;
 <script>
   import { siteConfig } from "@/config";
   import type { ImageTexture } from "@/types/types";
-  import { BannerTransitions, BannerEffects } from "@constants/banner-effects";
+  import { BannerEffects, BannerTransitions } from "@constants/banner-effects";
   import { BANNER_DEFAULTS } from "@constants/constants";
-  import { randInt, debounce } from "@utils/common";
+  import { randInt } from "@utils/common";
   import {
     BackgroundCamera,
     BackgroundRenderer,

@@ -89,7 +89,7 @@
   --ease-in-strong: cubic-bezier(0.5, 0, 0.75, 0);
 }
 
-:root.dark {
+:root[data-site-theme="dark"] {
   --color-selection-bar: linear-gradient(
     to right,
     oklch(0.7 0.1 0),

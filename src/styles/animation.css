@@ -97,7 +97,7 @@ html.is-rendering:not(.swup-native) .swup-transition-main {
 /* Animation styles for components that require entrance animations */
 .onload-animation {
   opacity: 0;
-  animation-fill-mode: forwards;
+  animation-fill-mode: both;
 }
 
 /* Animation Delay for components */

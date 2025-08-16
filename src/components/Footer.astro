@@ -1,22 +1,35 @@
 ---
+import { checkOnHomePage } from "@utils/url";
 import { profileConfig } from "../config";
 import { url } from "../utils/url";
 
 const currentYear = new Date().getFullYear();
+const isHomePage = checkOnHomePage(Astro.url.pathname);
 ---
 
 <div class="transition border-t border-black/10 dark:border-white/15 my-10 border-dashed mx-32"></div>
 <div
   class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6"
 >
-  <div class="transition text-50 text-sm text-center text-()">
-    &copy; <span id="copyright-year">{currentYear}</span>
-    {profileConfig.name}. All Rights Reserved. /
-    <a class="transition link text-(--primary) font-medium" target="_blank" href={url("rss.xml")}>RSS</a> /
+  <div
+    class:list={[
+      "transition text-50 text-sm text-center",
+      "selection:bg-[oklch(0.4_0.08_var(--hue)_/_0.72)]",
+      !isHomePage &&
+        "lg:text-neutral-200 lg:[&>span]:text-shadow-[0_0_4px_oklch(0_0_0_/_0.48),0_0_16px_oklch(0_0_0_/_0.72)]",
+    ]}
+  >
+    <span>&copy; &nbsp;</span>
+    <span id="copyright-year">{currentYear}</span>
+    <span>{profileConfig.name}. All Rights Reserved.</span>
+    <span> &nbsp; / &nbsp;</span>
+    <a class="transition link text-(--primary) font-medium" target="_blank" href={url("rss.xml")}>RSS</a>
+    <span> &nbsp; / &nbsp;</span>
     <a class="transition link text-(--primary) font-medium" target="_blank" href={url("sitemap-index.xml")}>Sitemap</a
     ><br />
-    Powered by
-    <a class="transition link text-(--primary) font-medium" target="_blank" href="https://astro.build">Astro</a> &
+    <span>Powered by</span>
+    <a class="transition link text-(--primary) font-medium" target="_blank" href="https://astro.build">Astro</a>
+    <span> & </span>
     <a class="transition link text-(--primary) font-medium" target="_blank" href="https://github.com/saicaca/fuwari">
       Sigure
     </a>

@@ -1,4 +1,5 @@
 @reference "tailwindcss";
+@reference "./variables.css";
 
 /* See: https://github.com/tailwindlabs/tailwindcss/discussions/17082 */
 @utility expand-animation {
@@ -174,10 +175,6 @@
 .custom-md img,
 #post-cover img {
   @apply cursor-zoom-in;
-}
-
-::selection {
-  background-color: var(--selection-bg);
 }
 
 .dash-line {
