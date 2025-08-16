@@ -63,7 +63,7 @@ const isHomePage = checkOnHomePage(Astro.url.pathname);
                       name="fa6-solid:arrow-up-right-from-square">
                 </Icon>
             </a>} -->
-        <div id="main-wrapper" class="w-full onload-animation animate-slide-up-fade-in">
+        <div id="main-wrapper" class="w-full onload-animation animate-fade-in lg:animate-slide-up-fade-in-small">
           <slot />
         </div>
         <div class="footer col-span-2 onload-animation animate-slide-up-fade-in-small hidden lg:block">
@@ -77,7 +77,7 @@ const isHomePage = checkOnHomePage(Astro.url.pathname);
     </div>
 
     <!-- Banner -->
-    <div id="banner-locator" class:list={["absolute h-full w-full top-0 -z-10", { "hidden lg:block": !isHomePage }]}>
+    <div id="banner-locator" class:list={["absolute h-full w-full top-0 -z-10 transition-opacity opacity-0 lg:opacity-100", { "md:opacity-100": isHomePage }]}>
       {
         bannerEnabled && (
           <div

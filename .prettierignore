@@ -1,3 +1,6 @@
 src/public/**
 dist/**
 node_modules/**
+
+src/content/**/*.md
+src/content/**/*.mdx

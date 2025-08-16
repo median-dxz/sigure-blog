@@ -208,9 +208,9 @@ const siteLang = lang.replace("_", "-");
       const bannerLocator = document.getElementById("banner-locator");
       if (bannerLocator) {
         if (isHomePage) {
-          bannerLocator.classList.remove("hidden");
+          bannerLocator.classList.add("md:opacity-100");
         } else {
-          bannerLocator.classList.add("hidden");
+          bannerLocator.classList.remove("md:opacity-100");
         }
       }
     });

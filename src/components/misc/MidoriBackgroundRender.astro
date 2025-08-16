@@ -14,6 +14,7 @@ const { className } = Astro.props;
   import { BannerEffects, BannerTransitions } from "@constants/banner-effects";
   import { BANNER_DEFAULTS } from "@constants/constants";
   import { randInt } from "@utils/common";
+  import { checkOnHomePage } from "@utils/url";
   import {
     BackgroundCamera,
     BackgroundRenderer,
@@ -42,20 +43,30 @@ const { className } = Astro.props;
   }
 
   async function renderBackground(container: HTMLCanvasElement, images: Array<ImageTexture>) {
-    const renderer = new BackgroundRenderer(container);
+    let renderer: BackgroundRenderer | undefined;
     console.log("[midori]: Renderer initialized with", images.length, "images");
 
     window.addEventListener("beforeunload", () => {
-      renderer.dispose();
+      renderer?.dispose();
     });
 
-    // Not sure if really needed, but keeping it for now
-    // const onContainerResize = debounce(500, () => {
-    //   resetCameraPosition(renderer.background.camera);
-    // });
+    const onContainerResize = () => {
+      if (
+        (window.matchMedia("(max-width: 1023px)").matches && !checkOnHomePage(location.pathname)) ||
+        window.matchMedia("(max-width: 767px)").matches
+      ) {
+        renderer?.dispose();
+        renderer = undefined;
+      } else if (!renderer) {
+        renderer = initializeRenderer();
+      }
 
-    // const observer = new ResizeObserver(onContainerResize);
-    // observer.observe(container);
+      // Not sure if really needed, but keeping it for now
+      // resetCameraPosition(renderer.background.camera);
+    };
+
+    const observer = new ResizeObserver(onContainerResize);
+    observer.observe(container);
 
     let currentIndex = -1;
     let startTime: number;
@@ -100,27 +111,33 @@ const { className } = Astro.props;
       camera.move({ x: 0.75, y: 0.5 });
     };
 
+    const initializeRenderer = () => {
+      const renderer = new BackgroundRenderer(container);
+      resetCameraPosition(renderer.background.camera);
+      renderer.setBackground(getImage().texture, {
+        type: TransitionType.Blend,
+        config: {
+          duration: 0.3,
+          easing: Easings.Quintic.Out,
+        },
+      });
+      type EffectConfigKeys = keyof typeof config.effects;
+      Object.entries(config.effects)
+        .filter(([effectType, enable]) => BannerEffects[effectType as EffectConfigKeys] && enable)
+        .forEach((entries) => {
+          const effectType = entries[0] as EffectConfigKeys;
+          const effectConfig = BannerEffects[effectType];
+          renderer.effects.set(effectType, effectConfig);
+        });
+      renderer.background.camera.sway(swayOffset, swayConfig);
+      dispatchBackgroundSetEvent(images[currentIndex]);
+      return renderer;
+    };
+
     // First load will always move the second-to-last image to the first position
     // So we shuffle the images twice to ensure randomness
     (shuffleImages(), shuffleImages());
-    resetCameraPosition(renderer.background.camera);
-    renderer.setBackground(getImage().texture, {
-      type: TransitionType.Blend,
-      config: {
-        duration: 0.3,
-        easing: Easings.Quintic.Out,
-      },
-    });
-    type EffectConfigKeys = keyof typeof config.effects;
-    Object.entries(config.effects)
-      .filter(([effectType, enable]) => BannerEffects[effectType as EffectConfigKeys] && enable)
-      .forEach((entries) => {
-        const effectType = entries[0] as EffectConfigKeys;
-        const effectConfig = BannerEffects[effectType];
-        renderer.effects.set(effectType, effectConfig);
-      });
-    renderer.background.camera.sway(swayOffset, swayConfig);
-    dispatchBackgroundSetEvent(images[currentIndex]);
+    onContainerResize();
 
     const transitionBackground = () => {
       const trType = config.transitions.at(randInt(0, config.transitions.length - 1)) as keyof typeof BannerTransitions;
@@ -152,8 +169,11 @@ const { className } = Astro.props;
       } as Transition;
 
       const image = getImage();
-      renderer.setBackground(image.texture, transition);
-      dispatchBackgroundSetEvent(image);
+
+      if (renderer) {
+        renderer.setBackground(image.texture, transition);
+        dispatchBackgroundSetEvent(image);
+      }
     };
 
     const onRequestAnimationFrame = (now: number) => {
