@@ -1,7 +1,7 @@
 {
-  "name": "@sigure/blog",
-  "type": "module",
+  "name": "@sigure/my-site",
   "private": true,
+  "type": "module",
   "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",

@@ -29,7 +29,7 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://fuwari.vercel.app/",
+  site: "https://median-dxz.xyz/",
   base: "/",
   trailingSlash: "always",
 
