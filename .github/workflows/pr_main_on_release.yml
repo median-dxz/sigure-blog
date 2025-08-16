@@ -1,0 +1,100 @@
+name: PR main to site-main on Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main and tags
+        run: |
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          git fetch --tags origin
+
+      - name: Resolve tag name from event
+        id: tag
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ "$EVENT_NAME" = "release" ]; then
+            TAG="$RELEASE_TAG"
+          else
+            TAG="$REF_NAME"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure tag exists locally and is from main
+        id: reachable
+        shell: bash
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -e
+          if [ -z "$TAG" ]; then
+            echo "No tag detected from the event payload."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "Tag $TAG not found locally; fetching tags..."
+            git fetch --tags origin
+          fi
+
+          if git merge-base --is-ancestor "$TAG" "origin/main"; then
+            echo "Tag $TAG is reachable from origin/main."
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Tag $TAG is NOT an ancestor of origin/main; skipping PR."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Ensure site-main exists
+        if: steps.reachable.outputs.ok == 'true'
+        run: |
+          git ls-remote --exit-code --heads origin site-main || {
+            echo "Branch site-main does not exist on origin."; exit 1;
+          }
+
+      - name: Create or update PR main -> site-main
+        if: steps.reachable.outputs.ok == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          ACTOR: ${{ github.actor }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+        run: |
+          set -e
+
+          NUM="$(gh pr list --repo "$REPO" --base site-main --head main --state open --json number --jq '.[0].number // ""')"
+
+          TITLE="Merge main into site-main after release ${TAG}"
+          BODY="This PR merges changes from main into site-main following the release ${TAG}.
+
+          合并模板主分支更改到个人 Blog 分支
+
+          - Release: ${RELEASE_URL:-N/A}
+          - Triggered by: @${ACTOR}
+          "
+
+          if [ -n "$NUM" ]; then
+            echo "Open PR #$NUM already exists. Commenting and exiting."
+            gh pr comment "$NUM" --repo "$REPO" --body "Triggered by release/tag ${TAG}: no new PR created."
+          else
+            gh pr create --repo "$REPO" -B site-main -H main --title "$TITLE" --body "$BODY"
+          fi
