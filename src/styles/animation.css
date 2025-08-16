@@ -56,7 +56,7 @@
 /* Page transition animations with Swup */
 .swup-progress-bar {
   height: 2px;
-  background-color: oklch(0.70 0.25 var(--hue));
+  background-color: oklch(0.7 0.25 var(--hue));
 }
 
 html.is-changing .swup-transition-main {
@@ -120,4 +120,23 @@ header {
 
 .footer {
   animation-delay: 100ms;
+}
+
+#post-container :nth-child(1) {
+  animation-delay: calc(0ms);
+}
+#post-container :nth-child(2) {
+  animation-delay: calc(50ms);
+}
+#post-container :nth-child(3) {
+  animation-delay: calc(100ms);
+}
+#post-container :nth-child(4) {
+  animation-delay: calc(175ms);
+}
+#post-container :nth-child(5) {
+  animation-delay: calc(250ms);
+}
+#post-container :nth-child(6) {
+  animation-delay: calc(325ms);
 }

@@ -25,6 +25,8 @@ import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 
+import mdx from "@astrojs/mdx";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://fuwari.vercel.app/",
@@ -92,6 +94,7 @@ export default defineConfig({
     }),
     svelte(),
     sitemap(),
+    mdx(),
   ],
 
   markdown: {
@@ -147,21 +150,6 @@ export default defineConfig({
   },
 
   vite: {
-    build: {
-      rollupOptions: {
-        onwarn(warning, warn) {
-          // temporarily suppress this warning
-          if (
-            warning.message.includes("is dynamically imported by") &&
-            warning.message.includes("but also statically imported by")
-          ) {
-            return;
-          }
-          warn(warning);
-        },
-      },
-    },
-
     plugins: [tailwindcss()],
   },
 

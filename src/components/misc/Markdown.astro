@@ -7,9 +7,7 @@ interface Props {
 const className = Astro.props.class;
 ---
 
-<div data-pagefind-body class=`prose dark:prose-invert prose-base max-w-none! custom-md ${className}`>
-  <!--<div class="prose dark:prose-invert max-w-none custom-md">-->
-  <!--<div class="max-w-none custom-md">-->
+<div data-pagefind-body class:list={[`prose dark:prose-invert prose-neutral max-w-none! custom-md`, className]}>
   <slot />
 </div>
 
@@ -32,7 +30,7 @@ const className = Astro.props.class;
 
       target.classList.add("success");
 
-      // 设置新的timeout并保存ID到按钮的自定义属性中
+      // Setting a new timeout and saving the ID to the button's custom attribute
       const newTimeoutId = setTimeout(() => {
         target.classList.remove("success");
       }, 1000);

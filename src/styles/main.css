@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin '@tailwindcss/typography';
 
 @layer base {
   html {
@@ -21,9 +22,8 @@
 @import "./components.css";
 @import "./animation.css";
 
-/* @import "./markdown-extend.styl"; */
-
 @import "./expressive-code.css";
-@import "./markdown.css";
 @import "./photoswipe.css";
+@import "./markdown.css";
+@import "./markdown-extend.css";
 @import "./scrollbar.css";

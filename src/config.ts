@@ -42,7 +42,7 @@ export const siteConfig: SiteConfig = {
     transitions: [TransitionType.Glitch, TransitionType.Blend], // Array of transition effects for the banner, will randomly select one from the list
     effects: {
       Vignette: true,
-      VignetteBlur: true,
+      Bloom: true,
     }, // Array of effects for the banner, doesn't support Glitch and MotionBlur effects
   },
 };
