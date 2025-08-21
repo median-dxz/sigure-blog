@@ -172,6 +172,24 @@ const siteLang = lang.replace("_", "-");
 
   themeStore.subscribe(applyThemeToDocument);
 
+  themeStore.subscribe((newTheme) => {
+    const giscus = document.getElementById("giscus-comments");
+    if (giscus) {
+      switch (newTheme) {
+        case "auto":
+          giscus.setAttribute("theme", "preferred_color_scheme");
+          break;
+        case "light":
+        case "dark":
+          giscus.setAttribute("theme", newTheme);
+          break;
+        default:
+          giscus.setAttribute("theme", "preferred_color_scheme");
+          break;
+      }
+    }
+  });
+
   function setupSwupHooks() {
     const swup = window.swup;
 

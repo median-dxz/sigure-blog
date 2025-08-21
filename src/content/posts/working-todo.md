@@ -11,6 +11,14 @@ lang: ""
 
 这是一份详尽的 TODO，描述了这个 Blog 距离正式发布还需要肝干的事情（目前能想到的所有）：
 
+---
+
+**已完成**:
+
+- [x] 启用 [giscus](https://giscus.app/zh-CN) 评论
+
+---
+
 - [ ] preitter 的配置有问题，会 lint markdown 内的代码块，也许这不算一个问题，但是会影响示例文档中的代码块，至少应该看看有没有选择性退出的办法。
 - [ ] vsc markdown 的格式化（也由Preitter提供）貌似不会自动给单词前后**中文加空格**，而且我装了markdownlint MarkdownAll-in-One preitter 三个插件，感觉完全没必要...总之解决一个中文加空格的办法。而且我记得 preitter 有 markdown 插件的。
 - [ ] 模板分支应该不需要 cSpell 插件的配置
@@ -42,12 +50,15 @@ lang: ""
 - [ ] 对接一个好用的cms系统
 - [ ] 刚发现的，这个github风格的Checkbox样式不太好看，点和选择框好像没对齐，spacing也不对
 - [ ] 小小更新一下模板分支下的主题文档和readme
+- [ ] vite分割chunk与警告的相关处理
+- [ ] 友链
+- [ ] 清除i18n
 
 暂时就想到这么多？
 
 ---
 灵感参考
 
-https://fuwari.vercel.app/archive/
-      
-https://yukina-blog.vercel.app/posts/4e92433e
+<https://fuwari.vercel.app/archive/>
+
+<https://yukina-blog.vercel.app/posts/4e92433e>

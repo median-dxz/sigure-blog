@@ -50,7 +50,7 @@ const isHomePage = checkOnHomePage(Astro.url.pathname);
       />
 
       <!-- the overflow-hidden here prevent long text break the layout-->
-      <main class="col-span-2 lg:col-span-1 overflow-hidden swup-transition-main">
+      <main class="col-span-2 lg:col-span-1 overflow-hidden swup-transition-main" data-swup-scroll-container>
         <!-- Banner image credit -->
         <!-- {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
                                    class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
@@ -77,7 +77,13 @@ const isHomePage = checkOnHomePage(Astro.url.pathname);
     </div>
 
     <!-- Banner -->
-    <div id="banner-locator" class:list={["absolute h-full w-full top-0 -z-10 transition-opacity opacity-0 lg:opacity-100", { "md:opacity-100": isHomePage }]}>
+    <div
+      id="banner-locator"
+      class:list={[
+        "absolute h-full w-full top-0 -z-10 transition-opacity opacity-0 lg:opacity-100",
+        { "md:opacity-100": isHomePage },
+      ]}
+    >
       {
         bannerEnabled && (
           <div
@@ -129,3 +135,7 @@ const isHomePage = checkOnHomePage(Astro.url.pathname);
     </div>
   </div>
 </Layout>
+
+<script>
+  import "giscus";
+</script>
