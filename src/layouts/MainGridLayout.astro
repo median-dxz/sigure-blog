@@ -4,7 +4,7 @@ import Footer from "@components/Footer.astro";
 import MidoriBackgroundRender from "@components/misc/MidoriBackgroundRender.astro";
 import SideBar from "@components/widget/SideBar.astro";
 import TOC from "@components/widget/TOC.astro";
-import { checkOnHomePage, url } from "@utils/url";
+import { checkOnHomePage } from "@utils/url";
 import type { MarkdownHeading } from "astro";
 import { siteConfig } from "../config";
 import Layout from "./Layout.astro";
@@ -77,12 +77,22 @@ const isHomePage = checkOnHomePage(Astro.url.pathname);
     </div>
 
     <!-- Banner -->
-    <div id="banner-locator" class:list={["absolute h-full w-full top-0 -z-10 transition-opacity opacity-0 lg:opacity-100", { "md:opacity-100": isHomePage }]}>
+    <div
+      id="banner-locator"
+      class:list={[
+        "absolute h-full w-full top-0 -z-10 transition-opacity opacity-0 lg:opacity-100",
+        { "md:opacity-100": isHomePage },
+      ]}
+    >
       {
         bannerEnabled && (
           <div
             id="banner-wrapper"
-            class:list={["w-full overflow-hidden top-0", { sticky: !isHomePage, absolute: isHomePage }]}
+            class:list={[
+              "w-full overflow-hidden top-0",
+              { sticky: !isHomePage, absolute: isHomePage },
+              "animate-fade-in",
+            ]}
           >
             <MidoriBackgroundRender
               className={[

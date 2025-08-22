@@ -1,5 +1,4 @@
 @reference "tailwindcss";
-@reference "./variables.css";
 
 /* See: https://github.com/tailwindlabs/tailwindcss/discussions/17082 */
 @utility expand-animation {

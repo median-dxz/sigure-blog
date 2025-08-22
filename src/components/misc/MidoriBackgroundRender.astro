@@ -15,6 +15,7 @@ const { className } = Astro.props;
   import { BANNER_DEFAULTS } from "@constants/constants";
   import { randInt } from "@utils/common";
   import { checkOnHomePage } from "@utils/url";
+
   import {
     BackgroundCamera,
     BackgroundRenderer,
@@ -27,6 +28,7 @@ const { className } = Astro.props;
     type LoopableTransitionConfig,
     type Transition,
   } from "midori-bg";
+  import { CanvasTexture } from "three";
 
   const config = { ...BANNER_DEFAULTS, ...siteConfig.banner };
   const container = document.getElementById("midori-background") as HTMLCanvasElement;
@@ -72,10 +74,10 @@ const { className } = Astro.props;
     let startTime: number;
     /**
      * This controls the camera's sway effect on the background.
-     * @property x Horizontal sway offset.
-     * @property y Vertical sway offset.
-     * @property z Depth sway offset.
-     * @property zr Rotation sway offset.
+     * @property x Horizontal sway offset (0-1).
+     * @property y Vertical sway offset (0-1).
+     * @property z Depth sway offset (1±offset).
+     * @property zr Rotation sway offset (0-360).
      */
     const swayOffset: CameraOffset = { x: 0.5, y: 0.08, z: 0.06, zr: 2 };
     const swayConfig: LoopableTransitionConfig = {
@@ -108,19 +110,31 @@ const { className } = Astro.props;
     };
 
     const resetCameraPosition = (camera: BackgroundCamera) => {
-      camera.move({ x: 0.75, y: 0.5 });
+      camera.move({ x: 0.5, y: 0.5 });
     };
 
     const initializeRenderer = () => {
       const renderer = new BackgroundRenderer(container);
-      resetCameraPosition(renderer.background.camera);
+
       renderer.setBackground(getImage().texture, {
         type: TransitionType.Blend,
         config: {
           duration: 0.3,
           easing: Easings.Quintic.Out,
+          onInit() {
+            renderer.background.camera.move({ x: 0.5, y: 0.5, z: 0.88 });
+            renderer.background.camera.move(
+              { z: 1 },
+              {
+                delay: 0.3,
+                duration: 1.5,
+                easing: Easings.Quintic.Out,
+              },
+            );
+          },
         },
       });
+
       type EffectConfigKeys = keyof typeof config.effects;
       Object.entries(config.effects)
         .filter(([effectType, enable]) => BannerEffects[effectType as EffectConfigKeys] && enable)

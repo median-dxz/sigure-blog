@@ -1,5 +1,3 @@
-@reference "tailwindcss";
-
 /* Animations for components */
 @theme {
   --animate-slide-down-fade-in: slide-down-fade-in 600ms var(--ease-out-strong); /* easeOutQuint-ish */
@@ -98,6 +96,11 @@ html.is-rendering:not(.swup-native) .swup-transition-main {
 .onload-animation {
   opacity: 0;
   animation-fill-mode: both;
+}
+
+#banner-wrapper {
+  animation-delay: 150ms;
+  animation-fill-mode: backwards;
 }
 
 /* Animation Delay for components */

@@ -36,6 +36,7 @@ export default defineConfig({
   integrations: [
     swup({
       theme: false,
+      accessibility: false, // Disabled by default
       smoothScrolling: true, // Don't use with native at the same time
       progress: true,
       updateHead: true,
