@@ -25,15 +25,7 @@ export const siteConfig: SiteConfig = {
   banner: {
     // Path to the banner images, relative to the /public directory
     imgList: [
-      `/bg/bg_1.jpg`,
-      `/bg/bg_2.jpg`,
-      `/bg/bg_3.jpg`,
-      `/bg/bg_4.jpg`,
-      `/bg/bg_5.jpg`,
-      `/bg/bg_6.jpg`,
-      `/bg/bg_7.jpg`,
-      `/bg/bg_8.jpg`,
-      `/bg/bg_9.jpg`,
+      `/images/demo-banner.png`,
     ],
     random: true, // Whether to randomly select a banner image from the list
     height: 65, // Height of the banner in vh, only applies to the home page (default: 65vh)
@@ -43,7 +35,7 @@ export const siteConfig: SiteConfig = {
     effects: {
       Vignette: true,
       Bloom: true,
-    }, // Array of effects for the banner, doesn't support Glitch and MotionBlur effects
+    }, // Effects for the banner, doesn't support Glitch and MotionBlur effects
   },
 };
 

@@ -319,3 +319,7 @@ a.card-github.fetch-error {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 0.15s;
 }
+
+.katex-display {
+  overflow-x: scroll;
+}
