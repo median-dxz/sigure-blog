@@ -154,6 +154,7 @@ const { className } = Astro.props;
     onContainerResize();
 
     const transitionBackground = () => {
+      if (images.length < 2) return;
       const trType = config.transitions.at(randInt(0, config.transitions.length - 1)) as keyof typeof BannerTransitions;
       // console.log("[midori]: Transitioning background with effect:", trName);
       const trObj = BannerTransitions[trType];
@@ -195,7 +196,7 @@ const { className } = Astro.props;
       const elapsed = now - startTime;
 
       if (elapsed > config.elapsedTime) {
-        transitionBackground();
+        void Promise.resolve().then(transitionBackground);
         startTime = now;
       }
 
