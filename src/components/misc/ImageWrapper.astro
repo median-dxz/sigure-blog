@@ -21,11 +21,14 @@ const isPublic = src.startsWith("/");
 
 // TODO temporary workaround for images dynamic import
 // https://github.com/withastro/astro/issues/3373
-let img;
+let img: ImageMetadata | undefined;
 if (isLocal) {
-  const files = import.meta.glob<ImageMetadata>("../../**", {
-    import: "default",
-  });
+  const files = import.meta.glob<ImageMetadata>(
+    "../../**/*.{jpg,jpeg,png,gif,webp,svg,apng,avif,heif,heic,bmp,ico,tiff,tif}",
+    {
+      import: "default",
+    },
+  );
   let normalizedPath = path.normalize(path.join("../../", basePath, src)).replace(/\\/g, "/");
   const file = files[normalizedPath];
   if (!file) {

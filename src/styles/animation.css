@@ -1,6 +1,6 @@
 /* Animations for components */
 @theme {
-  --animate-slide-down-fade-in: slide-down-fade-in 600ms var(--ease-out-strong); /* easeOutQuint-ish */
+  --animate-slide-down-fade-in: slide-down-fade-in 450ms var(--ease-out-strong); /* easeOutQuint-ish */
   @keyframes slide-down-fade-in {
     0% {
       transform: translateY(-50px);
@@ -17,7 +17,7 @@
   --animate-slide-up-fade-in: slide-up-fade-in 600ms var(--ease-out-strong);
   @keyframes slide-up-fade-in {
     0% {
-      transform: translateY(50px);
+      transform: translateY(4.5rem);
       opacity: 0;
       scale: 0.98;
     }
@@ -31,7 +31,7 @@
   --animate-slide-up-fade-in-small: slide-up-fade-in-small 300ms ease-in-out;
   @keyframes slide-up-fade-in-small {
     0% {
-      transform: translateY(20px);
+      transform: translateY(2rem);
       opacity: 0;
     }
     100% {

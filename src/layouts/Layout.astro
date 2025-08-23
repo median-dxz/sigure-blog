@@ -10,6 +10,7 @@ import exo2Woff2 from "@fontsource-variable/exo-2/files/exo-2-latin-wght-normal.
 import "@fontsource-variable/noto-sans-sc";
 
 import "katex/dist/katex.css";
+import "photoswipe/style.css";
 import "../styles/main.css";
 
 interface Props {
@@ -161,8 +162,6 @@ const siteLang = lang.replace("_", "-");
   import { checkOnHomePage } from "@utils/url";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import { BANNER_DEFAULTS, MAIN_PANEL_OVERLAPS_BANNER_HEIGHT } from "../constants/constants";
-
-  import "photoswipe/style.css";
 
   let lightbox = createPhotoSwipe();
   const BANNER_HEIGHT = siteConfig.banner?.height ?? BANNER_DEFAULTS.height;

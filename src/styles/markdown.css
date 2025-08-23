@@ -30,6 +30,10 @@
     }
   }
 
+  section {
+    @apply mb-[2rem];
+  }
+
   a:not(.no-styling) {
     @apply relative bg-none link font-medium text-[var(--primary)]
         underline decoration-[var(--link-underline)] decoration-1 decoration-dashed underline-offset-4;
@@ -130,5 +134,9 @@
     max-width: 100%;
     overflow-x: auto;
     margin: 1em 0;
+  }
+
+  .katex-display {
+    overflow-x: scroll;
   }
 }
