@@ -1,4 +1,17 @@
 @import "tailwindcss";
+
+/* base */
+@import "./variables.css";
+@import "./components.css";
+@import "./animation.css";
+
+/* component-specific */
+@import "./expressive-code.css";
+@import "./photoswipe.css";
+@import "./markdown.css";
+@import "./markdown-extend.css";
+@import "./scrollbar.css";
+
 @plugin '@tailwindcss/typography';
 
 @layer base {
@@ -17,13 +30,3 @@
 }
 
 @custom-variant dark (&:where([data-site-theme=dark], [data-site-theme=dark] *));
-
-@import "./variables.css";
-@import "./components.css";
-@import "./animation.css";
-
-@import "./expressive-code.css";
-@import "./photoswipe.css";
-@import "./markdown.css";
-@import "./markdown-extend.css";
-@import "./scrollbar.css";

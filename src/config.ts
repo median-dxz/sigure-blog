@@ -43,7 +43,7 @@ export const siteConfig: SiteConfig = {
     effects: {
       Vignette: true,
       Bloom: true,
-    }, // Array of effects for the banner, doesn't support Glitch and MotionBlur effects
+    }, // Effects for the banner, doesn't support Glitch and MotionBlur effects
   },
 };
 

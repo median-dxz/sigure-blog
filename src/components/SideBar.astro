@@ -1,8 +1,8 @@
 ---
 import type { MarkdownHeading } from "astro";
-import Categories from "./Categories.astro";
-import Profile from "./Profile.astro";
-import Tag from "./Tags.astro";
+import Categories from "./widget/Categories.astro";
+import Profile from "./widget/Profile.astro";
+import Tag from "./widget/Tags.astro";
 
 interface Props {
   class?: string;
@@ -13,8 +13,8 @@ const className = Astro.props.class;
 ---
 
 <aside id="sidebar" class:list={[className, "w-full"]}>
-  <div class="flex flex-col w-full gap-4 mb-4 onload-animation animate-fade-in">
-    <Profile />
+  <div class="flex flex-col w-full gap-4 mb-4">
+    <Profile class="onload-animation animate-slide-up-fade-in-small"/>
   </div>
   <div id="sidebar-sticky" class="transition-all duration-600 flex flex-col w-full gap-4 sticky top-4">
     <Categories class="onload-animation animate-slide-up-fade-in-small" />

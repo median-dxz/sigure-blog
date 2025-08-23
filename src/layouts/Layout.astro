@@ -10,7 +10,7 @@ import exo2Woff2 from "@fontsource-variable/exo-2/files/exo-2-latin-wght-normal.
 import "@fontsource-variable/noto-sans-sc";
 
 import "katex/dist/katex.css";
-
+import "photoswipe/style.css";
 import "../styles/main.css";
 
 interface Props {
@@ -47,7 +47,7 @@ if (!lang) {
 const siteLang = lang.replace("_", "-");
 ---
 
-<html lang={siteLang} class="scroll-auto" data-theme={expressiveCodeConfig.theme}>
+<html lang={siteLang} data-theme={expressiveCodeConfig.theme}>
   <head>
     <title>{pageTitle}</title>
 
@@ -136,7 +136,7 @@ const siteLang = lang.replace("_", "-");
     class:list={[
       "min-h-screen bg-(--page-bg) transition text-[14px] md:text-[16px]",
       "selection:bg-(--selection-bg)",
-      "hidden",
+      "hidden overflow-y-scroll",
     ]}
   >
     <!-- No effects for now -->
@@ -162,8 +162,6 @@ const siteLang = lang.replace("_", "-");
   import { checkOnHomePage } from "@utils/url";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import { BANNER_DEFAULTS, MAIN_PANEL_OVERLAPS_BANNER_HEIGHT } from "../constants/constants";
-
-  import "photoswipe/style.css";
 
   let lightbox = createPhotoSwipe();
   const BANNER_HEIGHT = siteConfig.banner?.height ?? BANNER_DEFAULTS.height;
@@ -249,52 +247,6 @@ const siteLang = lang.replace("_", "-");
       isClickAwayStore.set(panel);
     });
   }
-
-  // function initCustomScrollbar() {
-  //   const katexElements = document.querySelectorAll(".katex-display") as NodeListOf<HTMLElement>;
-
-  //   const katexObserverOptions = {
-  //     root: null,
-  //     rootMargin: "100px",
-  //     threshold: 0.1,
-  //   };
-
-  //   const processKatexElement = (element: HTMLElement) => {
-  //     if (!element.parentNode) return;
-  //     if (element.hasAttribute("data-scrollbar-initialized")) return;
-
-  //     const container = document.createElement("div");
-  //     container.className = "katex-display-container";
-  //     container.setAttribute("aria-label", "scrollable container for formulas");
-
-  //     element.parentNode.insertBefore(container, element);
-  //     container.appendChild(element);
-
-  //     OverlayScrollbars(container, {
-  //       scrollbars: {
-  //         theme: "scrollbar-base scrollbar-auto",
-  //         autoHide: "leave",
-  //         autoHideDelay: 500,
-  //         autoHideSuspend: false,
-  //       },
-  //     });
-
-  //     element.setAttribute("data-scrollbar-initialized", "true");
-  //   };
-
-  //   const katexObserver = new IntersectionObserver((entries, observer) => {
-  //     entries.forEach((entry) => {
-  //       if (entry.isIntersecting) {
-  //         processKatexElement(entry.target as HTMLElement);
-  //         observer.unobserve(entry.target);
-  //       }
-  //     });
-  //   }, katexObserverOptions);
-
-  //   katexElements.forEach((element) => {
-  //     katexObserver.observe(element);
-  //   });
-  // }
 
   function createPhotoSwipe() {
     const lightbox = new PhotoSwipeLightbox({

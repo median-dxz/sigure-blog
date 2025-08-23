@@ -7,7 +7,15 @@ interface Props {
 const className = Astro.props.class;
 ---
 
-<div data-pagefind-body class:list={[`prose dark:prose-invert prose-neutral max-w-none! custom-md`, className]}>
+<div
+  data-pagefind-body
+  class:list={[
+    `prose dark:prose-invert prose-neutral max-w-none!`,
+    "prose-h1:text-3xl prose-hr:mt-6 prose-hr:mb-6",
+    "custom-md",
+    className,
+  ]}
+>
   <slot />
 </div>
 
