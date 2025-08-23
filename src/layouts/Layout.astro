@@ -47,7 +47,7 @@ if (!lang) {
 const siteLang = lang.replace("_", "-");
 ---
 
-<html lang={siteLang} class="scroll-auto" data-theme={expressiveCodeConfig.theme}>
+<html lang={siteLang} data-theme={expressiveCodeConfig.theme}>
   <head>
     <title>{pageTitle}</title>
 
@@ -136,7 +136,7 @@ const siteLang = lang.replace("_", "-");
     class:list={[
       "min-h-screen bg-(--page-bg) transition text-[14px] md:text-[16px]",
       "selection:bg-(--selection-bg)",
-      "hidden",
+      "hidden overflow-y-scroll",
     ]}
   >
     <!-- No effects for now -->

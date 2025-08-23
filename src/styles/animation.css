@@ -103,13 +103,17 @@ html.is-rendering:not(.swup-native) .swup-transition-main {
   animation-fill-mode: backwards;
 }
 
+#profile {
+  overflow-anchor: none;
+}
+
 /* Animation Delay for components */
 header {
   animation-delay: 0ms;
 }
 
 /* aside */
-.profile {
+#profile {
   animation-delay: 0ms;
 }
 
