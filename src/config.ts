@@ -24,17 +24,15 @@ export const siteConfig: SiteConfig = {
   ],
   banner: {
     // Path to the banner images, relative to the /public directory
-    imgList: [
-      `/images/demo-banner.png`,
-    ],
+    imgList: [`/images/demo-banner-1.webp`, `/images/demo-banner-2.webp`],
     random: true, // Whether to randomly select a banner image from the list
     height: 65, // Height of the banner in vh, only applies to the home page (default: 65vh)
     extendHeight: 60, // Height of the extended banner in vh, only applies to the home page (default: 60vh)
     elapsedTime: 15000, // Time in milliseconds for the banner to change (default: 15000ms)
-    transitions: [TransitionType.Glitch, TransitionType.Blend], // Array of transition effects for the banner, will randomly select one from the list
+    transitions: [TransitionType.Slide, TransitionType.Blend], // Array of transition effects for the banner, will randomly select one from the list
     effects: {
       Vignette: true,
-      Bloom: true,
+      VignetteBlur: true,
     }, // Effects for the banner, doesn't support Glitch and MotionBlur effects
   },
 };
