@@ -1,20 +1,11 @@
 @reference "./components.css";
 
 .custom-md {
-  & :is(h1, h2, h3, h4, h5, h6):first-of-type {
+  & > section > :is(h1, h2, h3, h4, h5, h6) {
     margin-top: 0;
   }
 
-  h1 {
-    @apply text-3xl;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  &:is(h1, h2, h3, h4, h5, h6) {
     .anchor {
       @apply transition -m-0.5 ml-[0.2ch] p-0.5 select-none opacity-0 no-underline;
 
@@ -28,10 +19,6 @@
         @apply opacity-100;
       }
     }
-  }
-
-  section {
-    @apply mb-[2rem];
   }
 
   a:not(.no-styling) {

@@ -43,7 +43,7 @@
   --deep-text: oklch(0.25 0.02 var(--hue));
   --title-active: oklch(0.6 0.1 var(--hue));
 
-  --line-divider: rgba(0, 0, 0, 0.08);
+  --line-divider: rgba(0, 0, 0, 0.18);
   --line-color: rgba(0, 0, 0, 0.1);
   --meta-divider: rgba(0, 0, 0, 0.2);
 
@@ -126,7 +126,7 @@
   --deep-text: oklch(0.25 0.02 var(--hue));
   --title-active: oklch(0.6 0.1 var(--hue));
 
-  --line-divider: rgba(255, 255, 255, 0.08);
+  --line-divider: rgba(255, 255, 255, 0.18);
   --line-color: rgba(255, 255, 255, 0.1);
   --meta-divider: rgba(255, 255, 255, 0.2);
 
