@@ -106,14 +106,12 @@
           fill="currentFill"
         />
       </svg>
-      <span class="sr-only">Loading...</span>
+      <span class="sr-only">{i18n(I18nKey.loading)}</span>
     </div>
   </div>
 {:else if groups.length === 0}
   <div class="text-center text-50">
-    <!-- TODO -->
-    <!-- {i18n(I18nKey.noPostsFound)} -->
-    "No posts found."
+    {i18n(I18nKey.noPosts)}
   </div>
 {:else}
   {#each groups as group}

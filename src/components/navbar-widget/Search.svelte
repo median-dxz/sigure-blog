@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import I18nKey from "@i18n/i18nKey";
   import { i18n } from "@i18n/translation";
   import Icon from "@iconify/svelte";
   import { setupClickAway } from "@utils/client/utils";
+  import { throttle } from "@utils/common";
   import { url } from "@utils/url";
   import { onMount } from "svelte";
 
-  let keywordDesktop = $state("");
-  let keywordMobile = $state("");
+  let keyword = $state("");
   let result: SearchResult[] = $state([]);
-  let isSearching = false;
+  let isSearching = $state(false);
   let pagefindLoaded = false;
   let initialized = $state(false);
 
@@ -35,11 +33,15 @@
   const togglePanel = () => {
     const panel = document.getElementById("search-panel");
     panel?.classList.toggle("float-panel-closed");
+
+    if (!panel?.classList.contains("float-panel-closed")) {
+      setupClickAway("search-panel", ["search-bar", "search-switch"]);
+    }
   };
 
-  const setPanelVisibility = (show: boolean, isDesktop: boolean): void => {
+  const setPanelVisibility = (show: boolean): void => {
     const panel = document.getElementById("search-panel");
-    if (!panel || !isDesktop) return;
+    if (!panel) return;
 
     if (show) {
       panel.classList.remove("float-panel-closed");
@@ -49,9 +51,9 @@
     }
   };
 
-  const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
+  const search = async (keyword: string): Promise<void> => {
     if (!keyword) {
-      setPanelVisibility(false, isDesktop);
+      setPanelVisibility(false);
       result = [];
       return;
     }
@@ -60,7 +62,9 @@
       return;
     }
 
+    result = [];
     isSearching = true;
+    setPanelVisibility(true);
 
     try {
       let searchResults: SearchResult[] = [];
@@ -76,11 +80,11 @@
       }
 
       result = searchResults;
-      setPanelVisibility(result.length > 0, isDesktop);
+      console.log("Search results:", result);
     } catch (error) {
       console.error("Search error:", error);
       result = [];
-      setPanelVisibility(false, isDesktop);
+      setPanelVisibility(false);
     } finally {
       isSearching = false;
     }
@@ -92,8 +96,7 @@
       pagefindLoaded =
         typeof window !== "undefined" && !!window.pagefind && typeof window.pagefind.search === "function";
       console.log("Pagefind status on init:", pagefindLoaded);
-      if (keywordDesktop) search(keywordDesktop, true);
-      if (keywordMobile) search(keywordMobile, false);
+      search(keyword);
     };
 
     if (import.meta.env.DEV) {
@@ -104,6 +107,7 @@
         console.log("Pagefind ready event received.");
         initializeSearch();
       });
+
       document.addEventListener("pagefindloaderror", () => {
         console.warn("Pagefind load error event received. Search functionality will be limited.");
         initializeSearch(); // Initialize with pagefindLoaded as false
@@ -119,19 +123,12 @@
     }
   });
 
-  run(() => {
-    if (initialized && keywordDesktop) {
-      (async () => {
-        await search(keywordDesktop, true);
-      })();
-    }
-  });
+  const throttledSearch = throttle(150, () => search(keyword));
 
-  run(() => {
-    if (initialized && keywordMobile) {
-      (async () => {
-        await search(keywordMobile, false);
-      })();
+  $effect(() => {
+    void (initialized && keyword);
+    if (initialized) {
+      throttledSearch();
     }
   });
 </script>
@@ -150,8 +147,8 @@
   ></Icon>
   <input
     placeholder={i18n(I18nKey.search)}
-    bind:value={keywordDesktop}
-    onfocus={() => search(keywordDesktop, true)}
+    bind:value={keyword}
+    onfocus={() => search(keyword)}
     class="transition-all pl-10 text-sm bg-transparent outline-0
          h-full w-40 active:w-60 focus:w-60 text-black/50 dark:text-white/50"
   />
@@ -187,13 +184,18 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2"
     ></Icon>
     <input
       placeholder="Search"
-      bind:value={keywordMobile}
+      bind:value={keyword}
       class="pl-10 absolute inset-0 text-sm bg-transparent outline-0
                focus:w-60 text-black/50 dark:text-white/50"
     />
   </div>
 
   <!-- search results -->
+  {#if isSearching}
+    <div class="p-4 text-center text-gray-500">{i18n(I18nKey.searching)}</div>
+  {:else if result.length === 0 && keyword}
+    <div class="p-4 text-center text-gray-500">{i18n(I18nKey.noResultsFound)}</div>
+  {/if}
   {#each result as item}
     <a
       href={item.url}
