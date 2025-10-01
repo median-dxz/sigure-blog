@@ -1,3 +1,9 @@
+// @ts-check
+import { spawn } from "node:child_process";
+import { dirname, relative } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import vercel from "@astrojs/vercel";
@@ -16,6 +22,7 @@ import remarkDirective from "remark-directive"; /* Handle directives */
 import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-directives";
 import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
+
 import { expressiveCodeConfig } from "./src/config.ts";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
@@ -24,8 +31,6 @@ import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
-
-import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
@@ -84,9 +89,9 @@ export default defineConfig({
           terminalTitlebarBorderBottomColor: "none",
         },
         textMarkers: {
-          delHue: 0,
-          insHue: 180,
-          markHue: 250,
+          delHue: "0",
+          insHue: "180",
+          markHue: "250",
         },
       },
       frames: {
@@ -96,6 +101,24 @@ export default defineConfig({
     svelte(),
     sitemap(),
     mdx(),
+    {
+      name: "pagefind",
+      hooks: {
+        "astro:build:done": ({ dir, logger }) => {
+          const loglevelFlag = getPagefindLoggingFlags(logger.options.level);
+          const targetDir = fileURLToPath(dir);
+          const cwd = dirname(fileURLToPath(import.meta.url));
+          const relativeDir = relative(cwd, targetDir);
+          return new Promise((resolve) => {
+            spawn("pnpm exec", ["pagefind", ...loglevelFlag, "--site", relativeDir], {
+              stdio: "inherit",
+              shell: true,
+              cwd,
+            }).on("close", () => resolve());
+          });
+        },
+      },
+    },
   ],
 
   markdown: {
@@ -116,10 +139,15 @@ export default defineConfig({
         {
           components: {
             github: GithubCardComponent,
+            // @ts-ignore
             note: (x, y) => AdmonitionComponent(x, y, "note"),
+            // @ts-ignore
             tip: (x, y) => AdmonitionComponent(x, y, "tip"),
+            // @ts-ignore
             important: (x, y) => AdmonitionComponent(x, y, "important"),
+            // @ts-ignore
             caution: (x, y) => AdmonitionComponent(x, y, "caution"),
+            // @ts-ignore
             warning: (x, y) => AdmonitionComponent(x, y, "warning"),
           },
         },
@@ -156,3 +184,23 @@ export default defineConfig({
 
   adapter: vercel(),
 });
+
+/**
+ * Map the logging level of Astro’s logger to one of Pagefind’s logging level flags.
+ * See: https://github.com/withastro/starlight/blob/main/packages/starlight/index.ts
+ */
+// @ts-ignore
+function getPagefindLoggingFlags(level) {
+  switch (level) {
+    case "silent":
+    case "error":
+      return ["--silent"];
+    case "warn":
+      return ["--quiet"];
+    case "debug":
+      return ["--verbose"];
+    case "info":
+    default:
+      return [];
+  }
+}

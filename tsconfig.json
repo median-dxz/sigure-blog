@@ -5,6 +5,7 @@
     "strictNullChecks": true,
     "allowJs": false,
     "declaration": true,
+    // "isolatedDeclarations": true,
     // "skipLibCheck": false,
     "plugins": [
       {

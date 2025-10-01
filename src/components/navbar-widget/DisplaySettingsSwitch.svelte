@@ -1,20 +1,9 @@
 <script lang="ts">
   import DisplaySettings from "@components/navbar-widget/DisplaySettings.svelte";
   import Icon from "@iconify/svelte";
-  import { isClickAwayStore } from "@store/index";
-  import { onDestroy } from "svelte";
+  import { setupClickAway } from "@utils/client/utils";
 
   let open = $state(false);
-
-  const unsubscribe = isClickAwayStore.subscribe((panel) => {
-    if (panel === "display-setting") {
-      open = false;
-    }
-  });
-
-  onDestroy(() => {
-    unsubscribe();
-  });
 </script>
 
 <button
@@ -23,6 +12,11 @@
   id="display-settings-switch"
   onclick={() => {
     open = !open;
+    if (open) {
+      setupClickAway("display-setting", ["display-settings-switch"], () => {
+        open = false;
+      });
+    }
   }}
 >
   <Icon icon="material-symbols:palette-outline" class="text-[1.25rem]" />

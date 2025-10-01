@@ -35,4 +35,9 @@ export const zh_CN: Translation = {
   [Key.author]: "作者",
   [Key.publishedAt]: "发布于",
   [Key.license]: "许可协议",
+
+  [Key.loading]: "加载中...",
+  [Key.noPosts]: "没有文章",
+  [Key.searching]: "搜索中...",
+  [Key.noResultsFound]: "未找到结果",
 };

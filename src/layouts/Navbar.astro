@@ -89,14 +89,24 @@ let links: NavBarLink[] = navBarConfig.links.map((item: NavBarLink | LinkPreset)
 </header>
 
 <script>
-  let menuBtn = document.getElementById("nav-menu-switch");
+  import { setupClickAway } from "@utils/client/utils";
+
+  const menuBtn = document.getElementById("nav-menu-switch");
+
   if (menuBtn) {
-    menuBtn.onclick = function () {
-      let menuPanel = document.getElementById("nav-menu-panel");
-      if (menuPanel) {
-        menuPanel.classList.toggle("float-panel-closed");
+    function toggleMenuPanel() {
+      const menuPanel = document.getElementById("nav-menu-panel");
+      if (!menuPanel) return;
+
+      // Open the panel
+      if (menuPanel.classList.contains("float-panel-closed")) {
+        setupClickAway("nav-menu-panel", ["nav-menu-switch"]);
       }
-    };
+
+      menuPanel.classList.toggle("float-panel-closed");
+    }
+
+    menuBtn.addEventListener("click", toggleMenuPanel);
   }
 </script>
 

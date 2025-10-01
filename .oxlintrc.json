@@ -9,7 +9,8 @@
     {
       "files": ["**/*.svelte", "**/*.astro", "**/*.vue"],
       "rules": {
-        "import/no-unassigned-import": "allow"
+        "import/no-unassigned-import": "allow",
+        "no-unused-expressions": ["error", { "allowShortCircuit": true }]
       }
     }
   ],
