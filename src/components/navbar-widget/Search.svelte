@@ -12,6 +12,8 @@
   let isSearching = $state(false);
   let pagefindLoaded = false;
   let initialized = $state(false);
+  // oxlint-disable-next-line no-unassigned-vars
+  let panel: HTMLDivElement;
 
   const fakeResult: SearchResult[] = [
     {
@@ -30,17 +32,19 @@
     },
   ];
 
+  const isPanelOpen = (): boolean => {
+    return !panel?.classList.contains("float-panel-closed");
+  };
+
   const togglePanel = () => {
-    const panel = document.getElementById("search-panel");
     panel?.classList.toggle("float-panel-closed");
 
-    if (!panel?.classList.contains("float-panel-closed")) {
+    if (!isPanelOpen()) {
       setupClickAway("search-panel", ["search-bar", "search-switch"]);
     }
   };
 
   const setPanelVisibility = (show: boolean): void => {
-    const panel = document.getElementById("search-panel");
     if (!panel) return;
 
     if (show) {
@@ -54,7 +58,14 @@
   const search = async (keyword: string): Promise<void> => {
     if (!keyword) {
       setPanelVisibility(false);
-      result = [];
+
+      // Avoid flashing of results when clearing the input box quickly
+      setTimeout(() => {
+        if (!isPanelOpen()) {
+          result = [];
+        }
+      }, 350);
+
       return;
     }
 
@@ -79,7 +90,7 @@
         console.error("Pagefind is not available in production environment.");
       }
 
-      result = searchResults;
+      result = searchResults = [];
       console.log("Search results:", result);
     } catch (error) {
       console.error("Search error:", error);
@@ -167,6 +178,7 @@
 <!-- search panel -->
 <div
   id="search-panel"
+  bind:this={panel}
   class="float-panel float-panel-closed search-panel absolute md:w-120
 top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2"
 >
@@ -193,7 +205,7 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2"
   <!-- search results -->
   {#if isSearching}
     <div class="p-4 text-center text-gray-500">{i18n(I18nKey.searching)}</div>
-  {:else if result.length === 0 && keyword}
+  {:else if result.length === 0}
     <div class="p-4 text-center text-gray-500">{i18n(I18nKey.noResultsFound)}</div>
   {/if}
   {#each result as item}
