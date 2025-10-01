@@ -2,7 +2,7 @@
   html {
     @apply scroll-auto;
   }
-  
+
   /* Chromium & Safari */
   *::-webkit-scrollbar {
     width: 12px;
