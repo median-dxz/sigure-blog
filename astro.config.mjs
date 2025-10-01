@@ -154,5 +154,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  adapter: vercel(),
+  adapter: vercel({
+    includeFiles: ["./dist/pagefind"],
+  }),
 });

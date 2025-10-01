@@ -90,8 +90,7 @@
         console.error("Pagefind is not available in production environment.");
       }
 
-      result = searchResults = [];
-      console.log("Search results:", result);
+      result = searchResults;
     } catch (error) {
       console.error("Search error:", error);
       result = [];
