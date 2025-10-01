@@ -1,4 +1,5 @@
 import type { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants";
+import type { ThemeObjectOrShikiThemeName } from "astro-expressive-code";
 import type { EffectType, TransitionType } from "midori-bg";
 
 export type SiteConfig = {
@@ -95,5 +96,5 @@ export type BlogPostData = {
 };
 
 export type ExpressiveCodeConfig = {
-  theme: string;
+  theme: ThemeObjectOrShikiThemeName;
 };

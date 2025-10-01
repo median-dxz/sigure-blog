@@ -2,10 +2,9 @@ import { h } from "hastscript";
 import { visit } from "unist-util-visit";
 
 export function parseDirectiveNode() {
-  return (tree, { _data }) => {
+  return (tree, { data: _data }) => {
     visit(tree, (node) => {
       if (node.type === "containerDirective" || node.type === "leafDirective" || node.type === "textDirective") {
-        // biome-ignore lint/suspicious/noAssignInExpressions: <check later>
         const data = node.data || (node.data = {});
         node.attributes = node.attributes || {};
         if (node.children.length > 0 && node.children[0].data && node.children[0].data.directiveLabel) {
