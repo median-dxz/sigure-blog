@@ -4,6 +4,7 @@
   import I18nKey from "@i18n/i18nKey";
   import { i18n } from "@i18n/translation";
   import Icon from "@iconify/svelte";
+  import { setupClickAway } from "@utils/client/utils";
   import { url } from "@utils/url";
   import { onMount } from "svelte";
 
@@ -42,6 +43,7 @@
 
     if (show) {
       panel.classList.remove("float-panel-closed");
+      setupClickAway("search-panel", ["search-bar", "search-switch"]);
     } else {
       panel.classList.add("float-panel-closed");
     }

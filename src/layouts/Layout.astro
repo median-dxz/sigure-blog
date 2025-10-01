@@ -157,7 +157,7 @@ const siteLang = lang.replace("_", "-");
 
 <script>
   import { siteConfig } from "@/config";
-  import { isClickAwayStore, themeStore } from "@store/index";
+  import { themeStore } from "@store/index";
   import { applyThemeToDocument } from "@utils/client/settings";
   import { checkOnHomePage } from "@utils/url";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
@@ -214,22 +214,6 @@ const siteLang = lang.replace("_", "-");
     });
   }
 
-  function setClickOutsideToClose(panel: string, ignores: string[]) {
-    document.addEventListener("click", (event) => {
-      let panelDom = document.getElementById(panel);
-      let tDom = event.target;
-      if (!(tDom instanceof Node)) return; // Ensure the event target is an HTML Node
-      for (let ig of ignores) {
-        let ie = document.getElementById(ig);
-        if (ie == tDom || ie?.contains(tDom)) {
-          return;
-        }
-      }
-      panelDom!.classList.add("float-panel-closed");
-      isClickAwayStore.set(panel);
-    });
-  }
-
   function createPhotoSwipe() {
     const lightbox = new PhotoSwipeLightbox({
       gallery: ".custom-md img, #post-cover img",
@@ -263,10 +247,6 @@ const siteLang = lang.replace("_", "-");
     lightbox.init();
     return lightbox;
   }
-
-  setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"]);
-  setClickOutsideToClose("nav-menu-panel", ["nav-menu-panel", "nav-menu-switch"]);
-  setClickOutsideToClose("search-panel", ["search-panel", "search-bar", "search-switch"]);
 
   if (window.swup) {
     setupSwupHooks();
