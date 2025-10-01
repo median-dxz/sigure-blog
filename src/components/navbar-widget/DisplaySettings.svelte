@@ -3,14 +3,13 @@
   import { i18n } from "@i18n/translation";
   import Icon from "@iconify/svelte";
   import { DEFAULT_HUE, hueStore } from "@store/index";
-  import { debounce } from "@utils/common";
+  import { throttle } from "@utils/common";
   import { onMount } from "svelte";
 
   const { open = false } = $props();
-
   let hue = $state(hueStore.get());
 
-  const mutate = debounce(150, () => {
+  const mutate = throttle(150, () => {
     $hueStore = hue;
   });
 
@@ -74,15 +73,13 @@
   </div>
   <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
     <input
+      id="colorSlider"
       aria-label={i18n(I18nKey.themeColor)}
       type="range"
       min="0"
       max="360"
       bind:value={hue}
-      class="slider"
-      id="colorSlider"
       step="5"
-      style="width: 100%"
     />
   </div>
 </div>
@@ -91,6 +88,7 @@
   #display-setting input[type="range"] {
     appearance: none;
     height: 1.5rem;
+    width: 100%;
     background-image: var(--color-selection-bar);
     transition: background-image 0.15s ease-in-out;
 

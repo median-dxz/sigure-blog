@@ -150,7 +150,8 @@ const { className } = Astro.props;
 
     // First load will always move the second-to-last image to the first position
     // So we shuffle the images twice to ensure randomness
-    (shuffleImages(), shuffleImages());
+    shuffleImages();
+    shuffleImages();
     onContainerResize();
 
     const transitionBackground = () => {

@@ -6,15 +6,15 @@ export function randInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function debounce(wait: number, cb: (...args: unknown[]) => unknown) {
+export function throttle<P>(wait: number, cb: (...args: P[]) => unknown) {
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  return () => {
+  return (...args: P[]) => {
     if (timeoutId) {
       return;
     }
 
     timeoutId = setTimeout(() => {
-      cb();
+      void cb(...args);
       timeoutId = undefined;
     }, wait);
   };
