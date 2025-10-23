@@ -9,7 +9,7 @@ draft: false
 lang: ""
 ---
 
-这是一份详尽的 TODO，描述了这个 Blog 距离正式发布还需要肝干的事情（目前能想到的所有）：
+这是一份详尽的 TODO，描述了这个 Blog 距离正式发布还需要肝的事情（目前能想到的所有）：
 
 ---
 
@@ -19,12 +19,12 @@ lang: ""
 - [x] Latex 渲染，恢复长公式的左右滚动条
 - [x] 全局滚动条定制，仅使用原生 CSS（`-webkit-scrollbar`）
 - [x] 暗色模式样式修复，顺带解决了 CSS 样式重复注入的问题
-- [x] 默认关闭 Swup 的 a11y 功能，把文章标题的 `<div>` 换成了 `<h1>`
+- [x] 默认关闭 [Swup](https://swup.js.org/) 的 a11y 功能，把文章标题的 `<div>` 换成了 `<h1>`
 - [x] （也许）终于解决了刷新页面时滚动条的跳变问题。通过对会影响布局，但是又有 `translateY` 进入动画的元素使用 `overflow-anchor: none` 解决的（我的天哪 GPT 大人）
 
 **25/10/01**：
 
-- [x] 修复 Pagefind 配置，其输出正确集成到 Astro 输出中，从而支持 Vercel 部署（使用 Vercel 部署时，必须将 Pagefind 的输出作为 Astro 构建的一环）。
+- [x] 修复 [Pagefind](https://pagefind.app/) 配置，其输出正确集成到 Astro 输出中，从而支持 Vercel 部署（使用 Vercel 部署时，必须将 Pagefind 的输出作为 Astro 构建的一环）。
 - [x] 为搜索组件提供更好的 UX，包括加载状态，节流输入等。
 - [x] 重构 Fuwari 的 clickaway 逻辑，避免重复注册监听器。同时将处理内化到对应的组件内，而不是全局统一注册，使职能更清晰。
 
