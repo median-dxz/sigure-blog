@@ -60,7 +60,7 @@
     "remark-sectionize": "^2.1.0",
     "sanitize-html": "^2.17.0",
     "svelte": "^5.39.7",
-    "three": "^0.179.1",
+    "three": "^0.180.0",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
@@ -71,7 +71,7 @@
     "@types/markdown-it": "^14.1.2",
     "@types/mdast": "^4.0.4",
     "@types/sanitize-html": "^2.16.0",
-    "@types/three": "^0.179.0",
+    "@types/three": "^0.180.0",
     "oxlint": "^1.19.0",
     "prettier": "3.6.2",
     "sharp": "^0.34.4",
