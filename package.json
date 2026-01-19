@@ -45,7 +45,7 @@
     "markdown-it": "^14.1.0",
     "mdast-util-to-string": "^4.0.0",
     "midori-bg": "^1.0.3",
-    "nanostores": "^1.0.1",
+    "nanostores": "^1.1.0",
     "pagefind": "^1.4.0",
     "photoswipe": "^5.4.4",
     "reading-time": "^1.5.0",
