@@ -73,7 +73,7 @@
     "@types/sanitize-html": "^2.16.0",
     "@types/three": "^0.180.0",
     "oxlint": "^1.39.0",
-    "prettier": "3.6.2",
+    "prettier": "3.8.0",
     "sharp": "^0.34.5",
     "swup": "^4.8.2",
     "tailwindcss": "^4.1.18",
