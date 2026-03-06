@@ -94,9 +94,35 @@ TBD
 
 ### Google AI Studio
 
-TBD
+GCP 300$ 赠送金额
+
+2SGD预授权验证码
+
+<https://linux.do/t/topic/934632> 打电话
+
+20SGD押金，试用结束前不要退，退了试用就没了
+
+<https://console.cloud.google.com/apis/api/generativelanguage.googleapis.com> 在这里为你新建的那个项目开启api，然后去
+
+<https://aistudio.google.com/app/projects> 导入那个GCP的项目
+
+<https://aistudio.google.com/app/api-keys> 从那个项目创建密钥，OK，开始享受额度，配额显示Tier 1就 ok 了
+
+<https://aistudio.google.com/app/usage> 在这里看消费
+
+<https://console.cloud.google.com/billing> 这里也能看消费 还能退押金之类，用完在这里退钱删项目吧（つづく）上面有一个免费试用状态，不要点激活，激活后如果你超额不会自动停，而是继续扣钱！
+
+## 其他支付平台使用情况
 
 ### ChatGPT Plus
+
+不让买
+
+### Claude Code
+
+不让买
+
+### Cloudflare R2
 
 TBD
 
